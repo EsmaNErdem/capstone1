@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wicked Acadia</title>
+
+    
+    <link rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link rel="stylesheet" href="/static/stylesheets/style.css">  
+    <link rel="shortcut icon" href="/static/images/logo.jpg">
+    <script src="/static/js/nav.js" defer></script>
+</head>
+<body>
+    <header class="primary-header flex">
+        <div>
+            <a href="/">
+                <img src="/static/images/logo.jpg" alt="Logo" class="logo">
+             </a>
+        </div>
+
+        <button class="mobile-nav-toggle"
+        aria-controls="primary-navigation" aria-expanded="false">
+            <span class="sr-only">Menu</span>
+        </button>
+
+        <nav>
+            <ul id="primary-navigation" data-visible ="false" class="primary-navigation flex">
+                <li>
+                    <a href="/activities">Activities</a>
+                </li>
+                <li>
+                    <a href="/events">Events</a>
+                </li>
+                <li>
+                    <a href="/places">Places</a>
+                </li>
+                
+                <!-- {% if not g.user %} -->
+                <li>
+                    <a  href="/signup">Sign up</a>
+                </li>
+                <li >
+                    <a href="/login">Log in</a>
+                </li>
+                <!-- {% else %} -->
+                <!-- <li>
+                    <a href="/users/{{ g.user.id }}">
+                        <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}">
+                    </a>
+                </li>
+                <li>
+                    <a href="/logout">Log out</a>
+                </li> -->
+                <!-- {% endif %} -->
+                <!-- {% if request.endpoint != None %} -->
+                <li>
+                    <form >
+                    <input name="q" placeholder="Search" id="search" class="search-box">
+                    <button>
+                        <span class="fa fa-search"></span>
+                    </button>
+                    </form>
+                </li>
+                <!-- {% endif %} -->
+            </ul>
+        </nav>
+    </header>
+
+    
+    
+    
+</body>
+</html>
