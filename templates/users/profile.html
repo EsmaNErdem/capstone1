@@ -1,0 +1,29 @@
+{% extends 'users/detail.html' %}
+{% block user_details %}
+<div class="col-xs-4 col-md-8">
+    <div class="row">
+        <div class="col-sm-3">
+            <img src="{{ user.image_url}}" alt="Image for {{ user.username }}" class="profile-image">
+        </div>
+        <div class="col-md-9">
+            <div class="title-box">
+                <p class="profile-title">NAME <span>{{ user.get_full_name }}</span></p>
+            </div>
+            <div class="title-box">
+                <p class="profile-title">E-MAIL <span>{{ user.email}}</span></p>
+            </div>
+            <div class="title-box">
+                <p class="profile-title"> USERNAME <span>{{ user.username }}</span></p>
+            </div>
+            {% if g.user.id == user.id %}
+            <div class="title-box d-flex flex-row">
+                <a href="/users/{{ user.id }}/edit" class="btn btn-info">Edit Profile</a>            
+                <form action="/users/delete" method="POST" class="form-inline">
+                    <button class="btn btn-danger">Delete User</button> 
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

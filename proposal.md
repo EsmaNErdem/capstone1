@@ -19,7 +19,7 @@ This website is for anyone who wants to plan their trip in ANP. Even kids can vi
 
 ### Database schema 
 
-![Database Schema](/images/capstone1-schema.jpg)
+![Database Schema](/static//images/capstone1-schema.jpg)
 
 This database schema is designed to store information about users and their favorite places to visit, events, and activities. The schema consists of several tables, each with its own purpose.
 

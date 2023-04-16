@@ -1,0 +1,26 @@
+{% extends 'base.html'  %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <ul>
+                <li>
+                    <a href="/users/{{ user.id }}">Profile</a>
+                </li>
+                <li>
+                    <a href="/users/{{ user.id }}/activities">Activities</a>
+                </li>
+                <li>
+                    <a href="/users/{{ user.id }}/events">Events</a>
+                </li>
+                <li>
+                    <a href="/users/{{ user.id }}/places">Places</a>
+                </li>
+            </ul>
+        </div>
+        {% block user_details %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}

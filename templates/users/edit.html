@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="display-1">Edit Profile</h1>
+    <p class="lead">Update info below</p>
+    <div class="row justify-content-md-center">
+        <div class="col-md-8">
+          
+          <form method="POST">
+            {{ form.hidden_tag() }}
+    
+            {% for field in form if field.widget.input_type != 'hidden' and field.name != 'password' %}
+            <p>
+                {{ field.label }}
+                {{ field(placeholder=field.label.text, class_="form-control") }}
+        
+                {% for error in field.errors %}
+                <span class="form-text text-danger">{{ error }}</span>
+                {% endfor %}
+            </p>
+            {% endfor %}
+    <!-- asks for password without prefilling it to confirm changes!!!!! use it in capstones -->
+            <p>To confirm changes, enter your password:</p>
+            {% if form.password.errors %}
+              {% for error in form.password.errors %}
+                <span class="form-text text-danger">
+                {{ error }}
+              </span>
+              {% endfor %}
+            {% endif %}
+            {{ form.password(placeholder="Enter your password to confirm", class="form-control") }}
+    
+            <div class="edit-btn-area mt-4">
+              <button class="btn btn-success">Edit this user!</button>
+              <a href="/users/{{ user_id }}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+          </form>
+        </div>
+    </div>
+</div>
+  
+
+{% endblock %}

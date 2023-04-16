@@ -2,7 +2,7 @@
 
 ### About Wicked Acadia
 
-One of the finest ways to rejuvenate and reconnect with oneself is to spend time in nature. Maine's reputation for natural beauty makes it a popular destination for nature enthusiasts. Wicked Acadia offers Nature Lovers to plan their trip to Acadia National Park (ANP) and see all that Maine has to offer.  Users can access alerts to stay informed, locate visitor centers, browse through events to enhance their experience, and explore places and activities with similar interests. 
+One of the finest ways to rejuvenate and reconnect with oneself is to spend time in nature. Maine's reputation for natural beauty makes it a popular destination for nature enthusiasts. Wicked Acadia offers Nature Lovers to plan their trip to Acadia National Park (ANP) and see all that Maine has to offer.  Users can access alerts to stay informed, locate visitor centers, browse through events to enhance their experience, and explore places and activities with similar interests. In this app, users can sign-up safely and save data to view later. The app has organized file system that users can find saved data easily. 
 
 ## Getting Started
 
@@ -10,7 +10,7 @@ One of the finest ways to rejuvenate and reconnect with oneself is to spend time
 
 This simple app created with Python(Python 3.10.6), Flask as Backend, Javascript as Frontend. SQLAlchhemy-Postgres was used to create databases. Users passwords will be hashed using Bcrpyt. 
 
-## Installing Dependencies
+### Installing Dependencies
 
 To install dependencies
 ```sh
@@ -23,7 +23,7 @@ To install dependencies
 
 ### Database schema 
 
-![Database Schema](/images/capstone1-schema.jpg)
+![Database Schema](/static//images/capstone1-schema.jpg)
 
 This database schema is designed to store information about users and their favorite places to visit, events, and activities. The schema consists of several tables, each with its own purpose.
 

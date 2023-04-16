@@ -1,3 +1,6 @@
+* {
+    box-sizing: border-box;
+}
 .flex {
     display: flex;
     gap: var(--gap, 2rem);
@@ -6,14 +9,14 @@
 /* NAVBAR */
 .logo {
     width: 80px;
-    margin: 1rem;  
+    margin: 2rem;  
     border-radius: 50%;  
 }
 
 .primary-header {
     height: 6rem;
     padding: 0;
-    margin:0 0 0 1rem;
+    margin:0;
     align-items: center;
     justify-content: space-between;
 }
@@ -40,7 +43,12 @@
     text-decoration: underline;
     transition: padding-bottom 0.2s ease-in-out;
     padding-bottom: 1em;
-  }
+}
+
+.nav-profile-img {
+    width: 30px;
+    border-radius: 50%;
+}
 
 .search-box {
     border-radius: 0.5rem;
@@ -96,19 +104,28 @@
     }
 
     /* incase backdrop-filter is not supported */
-@supports (backdrop-filter: blur(0.5rem)) {
-    .primary-header {
-        backdrop-filter: blur(0.5rem);
+    @supports (backdrop-filter: blur(0.5rem)) {
+        .primary-header {
+            backdrop-filter: blur(0.5rem);
+        }
     }
 }
+
+
+
+.profile-image{
+    width: 100%;
+    border-radius: 50%;
+    display: block;
 }
 
-
 body{
-    background-image:url(/static/images/background-1.jpg) ;
+    margin: 0;
+    /* background-image:url(/static/images/background-1.jpg) ;
     background-repeat: no-repeat;
     background-size: cover;
-    background-attachment: fixed;
+    background-attachment: fixed; */
+    background-color: #e6ecf0;
     /*so the navigation mobile slide doesn't overlap  */
     overflow-x: hidden;
 }
