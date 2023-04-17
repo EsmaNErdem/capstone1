@@ -1,0 +1,35 @@
+{% extends 'base.html'  %}
+
+
+{% block content %}
+
+{% block background_img %}
+{% endblock %}
+<div class="homepage-header">
+    <div class="container-fluid">
+        <div class="row justify-content-between">
+            <div class="col-3">
+                <h1>Acadia National Park</h1>
+            </div>
+            <div class="col-9">
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="nav-item active">
+                      <a class="nav-link" href="/"><i class="fa-solid fa-info"></i>Info<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/centers"><i class="fa-solid fa-location-crosshairs"></i>Visitor Centers</a>
+                      </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/alerts"><i class="fa-regular fa-bell"></i>Alerts</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block homepage_content %}
+{% endblock %}
+
+{% endblock %}

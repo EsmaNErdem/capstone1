@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 
 from forms import UserSignUpForm, LoginForm, ChangePasswordForm
 from models import db, connect_db, User
+from api import Alerts, Centers, Info, Activities
 
 CURR_USER_KEY = "curr_user"
 
@@ -26,6 +27,10 @@ toolbar = DebugToolbarExtension(app)
 app.app_context().push()
 connect_db(app)
 
+alerts = Alerts()
+centers = Centers()
+info = Info()
+activities = Activities()
 
 # ------------USER ROUTES---------------#
 # SIGNUP/LOGIN/LOGOUT
@@ -87,8 +92,6 @@ def signup():
             
 
         except IntegrityError:
-            import pdb
-            pdb.set_trace()
             flash("Invalid username, please try again", 'danger')
             return render_template('users/signup.html', form=form)
 
@@ -183,16 +186,54 @@ def delete_user():
 
     return redirect("/signup")
 
+# ----------------ACTIVITIES---------------
+@app.route('/activities')
+def show_activities():
+    """Shows list of activities with short description"""
+    
+    activities_data = activities.get_response()
+    # import pdb
+    # pdb.set_trace()
+    return render_template('activities/list.html', activities=activities_data)
+
+@app.route('/activities/<activity_id>')
+def show_activity(activity_id):
+    """Shows selected Activity with detailed info"""
+    
+    activity_data = activities.get_activity(activity_id)
+    # import pdb
+    # pdb.set_trace()
+    return render_template('activities/show.html', activity=activity_data[0])
+
+
 
 # ------------------HOMEPAGE------------
+# Homepage and Error Pages
+
+    
 
 @app.route('/')
-def logout():
-    """Show homepage"""
+def show_homepage_info():
+    """Show homepge anf info about about Acadia National Park"""
 
-    return render_template('homepage.hmtl')
+    info_data = info.get_response()
+    return render_template('homepage/info.html', info=info_data[0])
 
+@app.route('/alerts')
+def show_alerts():
+    """Show alerts"""
 
+    info_data = info.get_response()
+    alerts_data = alerts.get_response()
+    return render_template('homepage/alerts.html', alerts=alerts_data, info=info_data[0])
+
+@app.route('/centers')
+def show_centers():
+    """Show visitor centers"""
+
+    centers_data = centers.get_response()
+    info_data = info.get_response()
+    return render_template('homepage/visitor-center.html', centers=centers_data, info=info_data[0])
 
 @app.errorhandler(404)
 def page_not_found(e):

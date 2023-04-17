@@ -1,0 +1,17 @@
+{% extends 'homepage/homepage.html'  %}
+
+{% block background_img %}
+<div class="picturefill-background">
+    <img src="{{ info['images'][0]['url'] }}" alt="homepage background image" >
+</div>
+{% endblock %}
+
+{% block homepage_content %}
+
+<div class="container">
+    <h1 class="title-1">Acadia National Park</h1>
+    <h3>{{ info["description"] }}</h3>
+    <p>{{ info["weatherInfo"] }}</p>
+</div>
+                    
+{% endblock %}

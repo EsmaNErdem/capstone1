@@ -1,0 +1,34 @@
+{% extends 'base.html'  %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <ul class="list-group list-group-flush m-2">
+        {% for activity in activities %}
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-xs-12 col-md-4">
+                    <a href="/activities/{{ activity['id']}}">
+                        <img src="{{ activity['images'][0]['crops'][0]['url']  }}" alt="{{ activity['images'][0]['caption']  }}" class="img-fluid">
+                    </a>
+                </div>
+                <div class="col-xs-12 col-md-7">
+                    <h1 class="title-1 text-info"><a href="/activities/{{ activity['id']}}">{{ activity["title"] }}</a></h1>
+                    <p>{{ activity["shortDescription"] }}</p>
+                    {% if g.user %}
+                    <div class="row justify-content-start">
+                        <form action="/activities/{{ activity['id']}}/favorite" method="POST" class="col-1">
+                            <button class="btn btn-sm"><i class="fa-regular fa-heart"></i></button>
+                        </form>
+                        <form action="/activities/{{ activity['id']}}/bookmark" method="POST" class="col-1">
+                            <button class="btn btn-sm"><i class="fa-regular fa-bookmark"></i></button>
+                        </form>                    
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'homepage/homepage.html'  %}
+
+{% block background_img %}
+<div class="picturefill-background">
+    <img src="{{ info['images'][2]['url'] }}" >
+</div>
+{% endblock %}
+
+{% block homepage_content %}
+
+<div class="container">
+    <h1>Alerts in effect</h1>
+    <ul class="list-group list-group-flush">
+        {% for alert in alerts %}
+        <li class="list-group-item">
+            <h2 class="text-danger"><i class="fa-solid fa-triangle-exclamation"></i>{{ alert["title"] }}</h2>
+            <p>{{ alert["description"] }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+                    
+{% endblock %}

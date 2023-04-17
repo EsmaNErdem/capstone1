@@ -1,0 +1,56 @@
+{% extends 'base.html'  %}
+
+
+{% block content %}
+
+<div class="container mt-2">
+    <div class="row activity-header">
+        <div class="col-xs-12 col-md-7">
+            <h1 class="title-1">{{ activity["title"] }}</h1>
+            <h1 class="title-3">{{ activity["activities"][0]["name"] }}</h1>
+        </div>
+        <div class="col-md-3">
+            <div class="row justify-content-start">
+                <form action="/activities/{{ activity['id']}}/favorite" method="POST" class="col-1">
+                    <button class="btn btn-sm"><i class="fa-regular fa-heart"></i></button>
+                </form>
+                <form action="/activities/{{ activity['id']}}/bookmark" method="POST" class="col-1">
+                    <button class="btn btn-sm"><i class="fa-regular fa-bookmark"></i></button>
+                </form>                    
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-6">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <p>Seasonal Description: <span>{{ activity["seasonDescription"] }}</span></p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Accessibility: <span>{{ activity["accessibilityInformation"] }}</span></p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Age Groups: <span>{{ activity["ageDescription"] }}</span></p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Pet Info: <span>{{ activity["petsDescription"] }}</span></p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Duration: <span>{{ activity["durationDescription"] }}</span></p>
+                    </li>              
+                </ul>
+            </div>
+            <div class="col-6">
+                <img src="{{ activity['images'][0]['crops'][0]['url']  }}" alt="{{ activity['images'][0]['caption']  }}" class="img-fluid">
+            </div>
+        </div>
+        <div class="row mt-4">
+            <p class="mt-2">{{ activity["activityDescription"] }}</p>
+            <p>{{ activity["longDescription"] }}</p>
+        </div>
+    
+    </div>
+</div>
+
+{% endblock %}

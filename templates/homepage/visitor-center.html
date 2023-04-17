@@ -1,0 +1,24 @@
+{% extends 'homepage/homepage.html'  %}
+
+{% block background_img %}
+<div class="picturefill-background">
+    <img src="{{ info['images'][0]['url'] }}" >
+</div>
+{% endblock %}
+
+{% block homepage_content %}
+
+<div class="container">
+    <h1>Visitor Centers</h1>
+    <ul class="list-group list-group-flush">
+        {% for center in centers %}
+        <li class="list-group-item">
+            <h2 class="text-info">{{ center["name"] }}</h2>
+            <p>Direction: {{ center["directionsInfo"] }}</p>
+            <p>Operation: {{ center["operatingHours"][0]["description"] }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+                    
+{% endblock %}
