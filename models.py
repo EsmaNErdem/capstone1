@@ -53,6 +53,24 @@ class User(db.Model):
         nullable=False,
     )
 
+    marked_places = db.relationship(
+        'Place',
+        secondary='bookmarks',
+        backref='users_mark'
+    )
+    
+    marked_events = db.relationship(
+        'Event',
+        secondary='bookmarks',
+        backref='users_mark'
+    )
+
+    marked_activities = db.relationship(
+        'Activity',
+        secondary='bookmarks',
+        backref='users_mark'
+    )
+
     @property
     def get_full_name(self):
         """Return users fullname"""
@@ -105,3 +123,149 @@ class User(db.Model):
 
 
 # -------------------------create class function to change password, 
+
+
+class Activity(db.Model):
+    """Activity database Model Class to save data"""
+
+    __tablename__ = 'activities'
+
+    id = db.Column(
+        db.Text,
+        primary_key=True,
+    )
+
+    image_url = db.Column(
+        db.Text,
+    )
+
+    title = db.Column(
+        db.Text,
+    )
+
+    description = db.Column(
+        db.Text,
+    )
+
+    users_fav = db.relationship(
+        'User',
+        secondary='favorites',
+        backref='fav_activities'
+    )
+
+
+class Event(db.Model):
+    """Event database Model Class to save data"""
+
+    __tablename__ = 'events'
+
+    id = db.Column(
+        db.Text,
+        primary_key=True,
+    )
+
+    title = db.Column(
+        db.Text,
+    )
+
+    description = db.Column(
+        db.Text,
+    )
+
+    users_fav = db.relationship(
+        'User',
+        secondary='favorites',
+        backref='fav_events'
+    )
+
+class Place(db.Model):
+    """Place database Model Class to save data"""
+
+    __tablename__ = 'places'
+
+    id = db.Column(
+        db.Text,
+        primary_key=True,
+    )
+
+    image_url = db.Column(
+        db.Text,
+    )
+
+    title = db.Column(
+        db.Text,
+    )
+
+    description = db.Column(
+        db.Text,
+    )
+
+    users_fav = db.relationship(
+        'User',
+        secondary='favorites',
+        backref='fav_places'
+    )
+
+class Favorites(db.Model):
+    """Mapping user favorite"""
+
+    __tablename__ = 'favorites'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete='cascade'),
+        nullable=False,
+    )
+
+    place_id = db.Column(
+        db.Text,
+        db.ForeignKey('places.id', ondelete='cascade'),
+    )
+
+    event_id = db.Column(
+        db.Text,
+        db.ForeignKey('events.id', ondelete='cascade'),
+    )
+    
+    activity_id = db.Column(
+        db.Text,
+        db.ForeignKey('activities.id', ondelete='cascade'),
+    )
+
+
+class Bookmarks(db.Model):
+    """Mapping user favorite"""
+
+    __tablename__ = 'bookmarks'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete='cascade'),
+        nullable=False,
+    )
+
+    place_id = db.Column(
+        db.Text,
+        db.ForeignKey('places.id', ondelete='cascade'),
+    )
+
+    event_id = db.Column(
+        db.Text,
+        db.ForeignKey('events.id', ondelete='cascade'),
+    )
+    
+    activity_id = db.Column(
+        db.Text,
+        db.ForeignKey('activities.id', ondelete='cascade'),
+    )
+    

@@ -1,0 +1,46 @@
+{% extends 'base.html'  %}
+
+
+{% block content %}
+<div class="container">
+    <h1 class="display-1">Places</h1>
+    <ul class="list-group list-group-flush m-2">
+        {% for place in places %}
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-xs-12 col-md-3">
+                    <a href="/places/{{ place['id']}}">
+                        {% if place["images"][0]["crops"] %}
+                        <img src='{{ place["images"][0]["crops"][0]["url"] }}' alt='{{ place["images"][0]["title"] }}' class="img-fluid">
+                        {% else %}
+                        <img src='{{ place["images"][0]["url"] }}' alt='{{ place["images"][0]["title"] }}' class="img-fluid">
+                        {% endif %}  
+                    </a>
+                </div>
+                <div class="col-xs-12 col-md-7">
+                    <h2 class="text-info"><a href="/places/{{ place['id']}}">{{ place["title"] }}</a></h2>
+                    <p>{{ place["audioDescription"] }}</p>
+                    {% if g.user %}
+                    <div class="row justify-content-start">
+                        <form action="/places/{{ place['id']}}/favorite" method="POST" class="col-1">
+                            <input type="hidden" name="title" value='{{ place["title"] }}'>
+                            <input type="hidden" name="image_url" value="{{ place['images'][0]['crops'][0]['url'] }}">
+                            <input type="hidden" name="description" value='{{ place["audioDescription"] }}'>
+                            <button class="btn btn-sm"><i class="fa-regular fa-heart"></i></button>
+                        </form>
+                        <form action="/places/{{ place['id']}}/bookmark" method="POST" class="col-1">
+                            <input type="hidden" name="title" value='{{ place["title"] }}'>
+                            <input type="hidden" name="image_url" value="{{ place['images'][0]['crops'][0]['url'] }}">
+                            <input type="hidden" name="description" value='{{ place["audioDescription"] }}'>
+                            <button class="btn btn-sm"><i class="fa-regular fa-bookmark"></i></button>
+                        </form>                    
+                    </div>
+                    {% endif %}
+                </div>
+                
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

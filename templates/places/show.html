@@ -1,0 +1,49 @@
+{% extends 'base.html'  %}
+
+
+{% block content %}
+
+<div class="container mt-2">
+    <div class="row place-header">
+        <div class="col-xs-12 col-md-7">
+            <h1  class="display-5">{{ place["title"] }}</h1>
+            <h3>{{ place["listingDescription"]}}</h3>
+        </div>
+        <div class="col-md-3">
+            {% if g.user %}                    
+            <div class="row justify-content-start">
+                <form action="/places/{{ place['id']}}/favorite" method="POST" class="col-1">
+                    <input type="hidden" name="title" value='{{ place["title"] }}'>
+                    <input type="hidden" name="image_url" value="{{ place['images'][0]['crops'][0]['url'] }}">
+                    <input type="hidden" name="description" value='{{ place["audioDescription"] }}'>
+                    <button class="btn btn-sm"><i class="fa-regular fa-heart"></i></button>
+                </form>
+                <form action="/places/{{ place['id']}}/bookmark" method="POST" class="col-1">
+                    <input type="hidden" name="title" value='{{ place["title"] }}'>
+                    <input type="hidden" name="image_url" value="{{ place['images'][0]['crops'][0]['url'] }}">
+                    <input type="hidden" name="description" value='{{ place["audioDescription"] }}'>
+                    <button class="btn btn-sm"><i class="fa-regular fa-bookmark"></i></button>
+                </form>                    
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-8">
+                {% if place["images"][0]["crops"] %}
+                <img src='{{ place["images"][0]["crops"][0]["url"] }}' alt='{{ place["images"][0]["title"] }}' class="img-fluid">
+                {% else %}
+                <img src='{{ place["images"][0]["url"] }}' alt='{{ place["images"][0]["title"] }}' class="img-fluid">
+                {% endif %}  
+                <p>{{ place["images"][0]["caption"] }}</p>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <p class="mt-2">{{ place["bodyText"] }}</p>
+        </div>
+    
+    </div>
+</div>
+
+{% endblock %}

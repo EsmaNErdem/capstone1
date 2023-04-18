@@ -2,25 +2,32 @@
 
 
 {% block content %}
-<div class="container-fluid">
+<div class="container">
+    <h1 class="display-1">Activities</h1>
     <ul class="list-group list-group-flush m-2">
         {% for activity in activities %}
         <li class="list-group-item">
             <div class="row">
-                <div class="col-xs-12 col-md-4">
+                <div class="col-xs-12 col-md-3">
                     <a href="/activities/{{ activity['id']}}">
                         <img src="{{ activity['images'][0]['crops'][0]['url']  }}" alt="{{ activity['images'][0]['caption']  }}" class="img-fluid">
                     </a>
                 </div>
                 <div class="col-xs-12 col-md-7">
-                    <h1 class="title-1 text-info"><a href="/activities/{{ activity['id']}}">{{ activity["title"] }}</a></h1>
+                    <h2  class="text-info"><a href="/activities/{{ activity['id']}}">{{ activity["title"] }}</a></h2>
                     <p>{{ activity["shortDescription"] }}</p>
                     {% if g.user %}
                     <div class="row justify-content-start">
                         <form action="/activities/{{ activity['id']}}/favorite" method="POST" class="col-1">
+                            <input type="hidden" name="title" value='{{ activity["title"] }}'>
+                            <input type="hidden" name="image_url" value="{{ activity['images'][0]['crops'][0]['url'] }}"">
+                            <input type="hidden" name="description" value='{{ activity["shortDescription"] }}'>
                             <button class="btn btn-sm"><i class="fa-regular fa-heart"></i></button>
                         </form>
                         <form action="/activities/{{ activity['id']}}/bookmark" method="POST" class="col-1">
+                            <input type="hidden" name="title" value='{{ activity["title"] }}'>
+                            <input type="hidden" name="image_url" value="{{ activity['images'][0]['crops'][0]['url'] }}"">
+                            <input type="hidden" name="description" value='{{ activity["shortDescription"] }}'>
                             <button class="btn btn-sm"><i class="fa-regular fa-bookmark"></i></button>
                         </form>                    
                     </div>

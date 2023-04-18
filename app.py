@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 
 from forms import UserSignUpForm, LoginForm, ChangePasswordForm
 from models import db, connect_db, User
-from api import Alerts, Centers, Info, Activities
+from api import Alerts, Centers, Info, Activities, Events, Places
 
 CURR_USER_KEY = "curr_user"
 
@@ -31,9 +31,12 @@ alerts = Alerts()
 centers = Centers()
 info = Info()
 activities = Activities()
+events = Events()
+places = Places()
 
 # ------------USER ROUTES---------------#
 # SIGNUP/LOGIN/LOGOUT
+
 @app.before_request
 def add_user_to_g():
     """If we're logged in, add curr user to Flask global."""
@@ -139,6 +142,9 @@ def logout():
 def profile(user_id):
     """Show user profile."""
 
+    if g.user.id != user_id or not g.user:
+        return redirect(f"/users/{g.user.id}")
+    
     user = User.query.get_or_404(user_id)
     
     return render_template('users/profile.html', user=user)
@@ -148,7 +154,7 @@ def profile(user_id):
 def edit_profile(user_id):
     """Show user edit form and update user data"""
 
-    if not g.user:
+    if g.user.id != user_id or not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
     user = g.user
@@ -162,9 +168,7 @@ def edit_profile(user_id):
             user.last_name = form.last_name.data
             user.image_url = form.image_url.data
 
-            db.session.commit()   
-            # import pdb
-            # pdb.set_trace()
+            db.session.commit()
             flash(f"{user.username}'s profile has been updated.", "success")
             return redirect(url_for('profile', user_id=user.id))
         else: 
@@ -187,13 +191,12 @@ def delete_user():
     return redirect("/signup")
 
 # ----------------ACTIVITIES---------------
+
 @app.route('/activities')
 def show_activities():
     """Shows list of activities with short description"""
     
     activities_data = activities.get_response()
-    # import pdb
-    # pdb.set_trace()
     return render_template('activities/list.html', activities=activities_data)
 
 @app.route('/activities/<activity_id>')
@@ -201,15 +204,48 @@ def show_activity(activity_id):
     """Shows selected Activity with detailed info"""
     
     activity_data = activities.get_activity(activity_id)
-    # import pdb
-    # pdb.set_trace()
     return render_template('activities/show.html', activity=activity_data[0])
 
 
+# ------------------EVENTS-------------------
+
+@app.route('/events')
+def show_events():
+    """Shows list of events with short description"""
+    
+    events_data = events.get_response()
+    return render_template('events/list.html', events=events_data)
+
+# @app.route('/events/<event_id>')
+# def show_event(event_id):
+#     """Shows selected event with detailed info"""
+    
+#     event_data = events.get_activity(event_id)
+#     return render_template('events/show.html', event=event_data[0])
+
+
+
+# ---------------PLACES-----------------
+
+@app.route('/places')
+def show_places():
+    """Shows list of places with short description"""
+    
+    places_data = places.get_response()
+    return render_template('places/list.html', places=places_data)
+
+@app.route('/places/<place_id>')
+def show_place(place_id):
+    """Shows selected place with detailed info"""
+    
+    place_data = places.get_places(place_id)
+    return render_template('places/show.html', place=place_data[0])
 
 # ------------------HOMEPAGE------------
 # Homepage and Error Pages
 
+    # import pdb
+    # pdb.set_trace()
     
 
 @app.route('/')

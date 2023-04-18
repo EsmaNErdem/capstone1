@@ -1,0 +1,38 @@
+{% extends 'base.html'  %}
+
+
+{% block content %}
+<div class="container">
+    <h1 class="display-1">Events</h1>
+    <ul class="list-group list-group-flush m-2">
+        {% for event in events %}
+        <li class="list-group-item">
+            <h2>{{ event["title"] }}</h2>        
+            <h3>By {{ event["contactname"] }}</h3>
+            <p>{{ event["description"] }}</p>
+            <p>{{ event["regresinfo"] }}</p>  
+            <p>
+                {% for hastag in event["types"] %}
+                <span>#{{ hastag }}</span>
+                {% endfor %}
+            </p>  
+            {% if g.user %}
+            <div class="row justify-content-start">
+                <form action="/events/{{ event['id']}}/favorite" method="POST" class="col-1">
+                    <input type="hidden" name="title" value='{{ event["title"] }}'>
+                    <input type="hidden" name="description" value='{{ event["description"] }}'>
+                    <button class="btn btn-sm"><i class="fa-regular fa-heart"></i></button>
+                </form>
+                <form action="/events/{{ event['id']}}/bookmark" method="POST" class="col-1">
+                    <input type="hidden" name="title" value='{{ event["title"] }}'>
+                    <input type="hidden" name="description" value='{{ event["description"] }}'>
+                    <button class="btn btn-sm"><i class="fa-regular fa-bookmark"></i></button>
+                </form>                    
+            </div>
+            {% endif %}               
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
