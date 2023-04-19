@@ -190,7 +190,70 @@ def delete_user():
 
     return redirect("/signup")
 
+
+@app.route('/users/<int:user_id>/favorites')
+def user_favorite(user_id):
+    """Show user favorites."""
+
+    if g.user.id != user_id or not g.user:
+        return redirect(f"/users/{g.user.id}")
+
+    user = User.query.get_or_404(user_id)
+    activity_fav = g.user.fav_activities
+    event_fav = g.user.fav_events
+    place_fav = g.user.fav_places
+    
+    return render_template('users/favorites.html', user=user, activities=activity_fav, events=event_fav, places=place_fav)
+
+@app.route('/users/<int:user_id>/favorites/activities')
+def user_favorite_activities(user_id):
+    """Show user activities favorites."""
+
+    if g.user.id != user_id or not g.user:
+        return redirect(f"/users/{g.user.id}")
+    
+    user = User.query.get_or_404(user_id)    
+    activity_fav = g.user.fav_activities
+    event_fav = g.user.fav_events
+    place_fav = g.user.fav_places
+    activity_ids_fav = [activity.id for activity in g.user.fav_activities]
+
+    return render_template('users/fav-activity.html', user=user, activities=activity_fav, events=event_fav, places=place_fav, activity_ids_fav=activity_ids_fav)
+
+@app.route('/users/<int:user_id>/favorites/events')
+def user_favorite_events(user_id):
+    """Show user events favorites."""
+
+    if g.user.id != user_id or not g.user:
+        return redirect(f"/users/{g.user.id}")
+    
+    user = User.query.get_or_404(user_id)    
+    activity_fav = g.user.fav_activities
+    event_fav = g.user.fav_events
+    place_fav = g.user.fav_places
+    event_ids_fav = [event.id for event in g.user.fav_events]
+
+    return render_template('users/fav-event.html', user=user, events=event_fav, activities=activity_fav, places=place_fav, event_ids_fav=event_ids_fav)
+
+@app.route('/users/<int:user_id>/favorites/places')
+def user_favorite_places(user_id):
+    """Show user places favorites."""
+
+    if g.user.id != user_id or not g.user:
+        return redirect(f"/users/{g.user.id}")
+    
+    user = User.query.get_or_404(user_id)    
+    place_fav = g.user.fav_places    
+    activity_fav = g.user.fav_activities
+    event_fav = g.user.fav_events
+    place_ids_fav = [place.id for place in g.user.fav_places]
+
+
+    return render_template('users/fav-place.html', user=user, places=place_fav, events=event_fav, activities=activity_fav, place_ids_fav=place_ids_fav)
 # ----------------ACTIVITIES---------------
+         
+    # import pdb
+    # pdb.set_trace()
 
 @app.route('/activities')
 def show_activities():
@@ -199,6 +262,7 @@ def show_activities():
     activities_data = activities.get_response()
     activity_ids_fav = [activity.id for activity in g.user.fav_activities]
     activity_ids_mark = [activity.id for activity in g.user.marked_activities]
+
     return render_template('activities/list.html', activities=activities_data, activity_ids_fav=activity_ids_fav, activity_ids_mark=activity_ids_mark)
 
 @app.route('/activities/<activity_id>')
@@ -208,6 +272,7 @@ def show_activity(activity_id):
     activity_data = activities.get_activity(activity_id)
     favored = Activity.query.get(activity_id) in g.user.fav_activities
     marked = Activity.query.get(activity_id) in g.user.marked_activities
+
     return render_template('activities/show.html', activity=activity_data[0], favored=favored, marked=marked)
 
 
@@ -220,15 +285,8 @@ def show_events():
     events_data = events.get_response()
     event_ids_fav = [event.id for event in g.user.fav_events]
     event_ids_mark = [event.id for event in g.user.marked_events]
+
     return render_template('events/list.html', events=events_data, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
-
-# @app.route('/events/<event_id>')
-# def show_event(event_id):
-#     """Shows selected event with detailed info"""
-    
-#     event_data = events.get_activity(event_id)
-#     return render_template('events/show.html', event=event_data[0])
-
 
 
 # ---------------PLACES-----------------
@@ -237,16 +295,21 @@ def show_events():
 def show_places():
     """Shows list of places with short description"""
     
-    places_data = places.get_response()
-    return render_template('places/list.html', places=places_data)
+    places_data = places.get_response()    
+    place_ids_fav = [place.id for place in g.user.fav_places]
+    place_ids_mark = [place.id for place in g.user.marked_places]
+   
+    return render_template('places/list.html', places=places_data, place_ids_fav=place_ids_fav, place_ids_mark=place_ids_mark)
 
 @app.route('/places/<place_id>')
 def show_place(place_id):
     """Shows selected place with detailed info"""
     
     place_data = places.get_places(place_id)
+    favored = Place.query.get(place_id) in g.user.fav_places
+    marked = Place.query.get(place_id) in g.user.marked_places
 
-    return render_template('places/show.html', place=place_data[0])
+    return render_template('places/show.html', place=place_data[0], favored=favored, marked=marked)
 
 # ------------------HOMEPAGE------------
 # Homepage and Error Pages
@@ -402,6 +465,7 @@ def remove_fav_event(event_id):
 
     return jsonify(message="Deleted")
 
+
 @app.route("/api/event/bookmark", methods=["POST"])
 def add_mark_event():
     """Creates Event instance and adds it to user's bookmark list"""
@@ -436,7 +500,80 @@ def remove_mark_event(event_id):
     g.user.marked_events.remove(event)
     db.session.commit()
     
-    # import pdb
-    # pdb.set_trace()
     return jsonify(message="Deleted")
+
+
+# Place
+@app.route("/api/place/favorite", methods=["POST"])
+def add_fav_place():
+    """Creates Place instance and adds it to user's fav list"""
     
+    id = request.json['id']
+
+    if not Place.query.get(id):
+        place = Place(
+            id = request.json['id'],
+            image_url = request.json['imageUrl'],
+            title = request.json['title'],
+            description = request.json['description']
+        )
+        db.session.add(place)
+        db.session.commit()
+    else: 
+        place = Place.query.get(id) 
+    
+    fav_places = Favorite(
+        user_id = g.user.id,
+        place_id = place.id
+    )
+    db.session.add(fav_places)
+    db.session.commit()
+
+    return (jsonify(message="Added to Favorite"))
+
+@app.route("/api/place/<place_id>/favorite", methods=["DELETE"])
+def remove_fav_place(place_id):
+    """Removes from place from user favorite and from database"""
+
+    place = Place.query.filter_by(id=place_id).first_or_404()
+    g.user.fav_places.remove(place)
+    db.session.commit()
+
+    return jsonify(message="Deleted")
+
+@app.route("/api/place/bookmark", methods=["POST"])
+def add_mark_place():
+    """Creates Place instance and adds it to user's bookmark list"""
+
+    id = request.json['id']
+    
+    if not Place.query.get(id):
+        place = Place(
+            id = request.json['id'],
+            image_url = request.json['imageUrl'],
+            title = request.json['title'],
+            description = request.json['description']
+        )
+        db.session.add(place)
+        db.session.commit()
+    else: 
+        place = Place.query.get(id) 
+    
+    mark_places = Bookmark(
+        user_id = g.user.id,
+        place_id = place.id
+    )
+    db.session.add(mark_places)
+    db.session.commit()
+
+    return (jsonify(message="Added to Bookmark"))
+
+@app.route("/api/place/<place_id>/bookmark", methods=["DELETE"])
+def remove_mark_place(place_id):
+    """Removes from place from user bookmark and from bookmark-database"""
+
+    place = Place.query.filter_by(id=place_id).first_or_404()
+    g.user.marked_places.remove(place)
+    db.session.commit()
+    
+    return jsonify(message="Deleted")

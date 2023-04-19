@@ -1,9 +1,12 @@
 
 const activityFav = document.querySelectorAll("#activity-fav");
-const activityMark = document.querySelectorAll("#activity-mark")
+const activityMark = document.querySelectorAll("#activity-mark");
 const eventFav = document.querySelectorAll("#event-fav");
-const eventMark = document.querySelectorAll("#event-mark")
+const eventMark = document.querySelectorAll("#event-mark");
+const placeFav = document.querySelectorAll("#place-fav");
+const placeMark = document.querySelectorAll("#place-mark");
 
+// Activity
 // Adding event listener to activity hearts
 
 async function toggleActivityFav(event) {
@@ -29,11 +32,11 @@ async function toggleActivityFav(event) {
                 console.error(err);
             }
     } else {
-        let id = heart.getAttribute("data-id")
+        let id = heart.getAttribute("data-id");
         const resp = await axios.delete(
             `/api/activity/${id}/favorite`
-        )
-        heart.classList.remove("favorite")
+        );
+        heart.classList.remove("favorite");
     }
 }
 
@@ -67,11 +70,11 @@ async function toggleActivityMark(event) {
                 console.error(err);
             }
     } else {
-        let id = bookmark.getAttribute("data-id")
+        let id = bookmark.getAttribute("data-id");
         const resp = await axios.delete(
             `/api/activity/${id}/bookmark`
-        )
-        bookmark.classList.remove("bookmark")
+        );
+        bookmark.classList.remove("bookmark");
     }
 }
 
@@ -82,7 +85,7 @@ activityMark.forEach((element) => {
 
 
 
-
+// Event
 // Adding event listener to event hearts
 
 async function toggleEventFav(event) {
@@ -106,11 +109,11 @@ async function toggleEventFav(event) {
                 console.error(err);
             }
     } else {
-        let id = heart.getAttribute("data-id")
+        let id = heart.getAttribute("data-id");
         const resp = await axios.delete(
             `/api/event/${id}/favorite`
-        )
-        heart.classList.remove("favorite")
+        );
+        heart.classList.remove("favorite");
     }
 }
 
@@ -142,14 +145,93 @@ async function toggleEventMark(event) {
                 console.error(err);
             }
     } else {
-        let id = bookmark.getAttribute("data-id")
+        let id = bookmark.getAttribute("data-id");
         const resp = await axios.delete(
             `/api/event/${id}/bookmark`
-        )
-        bookmark.classList.remove("bookmark")
+        );
+        bookmark.classList.remove("bookmark");
     }
 }
 
 eventMark.forEach((element) => {
     element.addEventListener("click", toggleEventMark);
+});
+
+
+
+
+// Place
+// Adding event listener to place hearts
+
+async function togglePlaceFav(place) {
+    const heart = place.target;
+
+    if(!heart.classList.contains("favorite")) {
+        let id = heart.getAttribute("data-id");
+        let imageUrl = heart.getAttribute('data-image-url');
+        let title = heart.getAttribute('data-title');
+        let description = heart.getAttribute('data-description');
+        heart.classList.add("favorite");
+        try {
+                const resp = await axios.post(
+                    "/api/place/favorite",
+                    {
+                        id,
+                        imageUrl,
+                        title,
+                        description
+                    });
+                console.log(resp);
+            } catch (err) {
+                console.error(err);
+            }
+    } else {
+        let id = heart.getAttribute("data-id");
+        const resp = await axios.delete(
+            `/api/place/${id}/favorite`
+        );
+        heart.classList.remove("favorite");
+    }
+}
+
+
+placeFav.forEach((element) => {
+    element.addEventListener("click", togglePlaceFav);
+});
+
+// Adding event listener to place bookmarks
+
+async function togglePlaceMark(place) {
+    const bookmark = place.target;
+
+    if(!bookmark.classList.contains("bookmark")) {
+        let id = bookmark.getAttribute("data-id");
+        let imageUrl = bookmark.getAttribute('data-image-url');
+        let title = bookmark.getAttribute('data-title');
+        let description = bookmark.getAttribute('data-description');
+        bookmark.classList.add("bookmark");
+        try {
+                const resp = await axios.post(
+                    "/api/place/bookmark",
+                    {
+                        id,
+                        imageUrl,
+                        title,
+                        description
+                    });
+                console.log(resp);
+            } catch (err) {
+                console.error(err);
+            }
+    } else {
+        let id = bookmark.getAttribute("data-id");
+        const resp = await axios.delete(
+            `/api/place/${id}/bookmark`
+        );
+        bookmark.classList.remove("bookmark");
+    }
+}
+
+placeMark.forEach((element) => {
+    element.addEventListener("click", togglePlaceMark);
 });

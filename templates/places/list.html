@@ -22,18 +22,12 @@
                     <p>{{ place["audioDescription"] }}</p>
                     {% if g.user %}
                     <div class="row justify-content-start">
-                        <form action="/places/{{ place['id']}}/favorite" method="POST" class="col-1">
-                            <input type="hidden" name="title" value='{{ place["title"] }}'>
-                            <input type="hidden" name="image_url" value="{{ place['images'][0]['crops'][0]['url'] }}">
-                            <input type="hidden" name="description" value='{{ place["audioDescription"] }}'>
-                            <button class="btn btn-sm"><i class="fa-regular fa-heart"></i></button>
-                        </form>
-                        <form action="/places/{{ place['id']}}/bookmark" method="POST" class="col-1">
-                            <input type="hidden" name="title" value='{{ place["title"] }}'>
-                            <input type="hidden" name="image_url" value="{{ place['images'][0]['crops'][0]['url'] }}">
-                            <input type="hidden" name="description" value='{{ place["audioDescription"] }}'>
-                            <button class="btn btn-sm"><i class="fa-regular fa-bookmark"></i></button>
-                        </form>                    
+                        
+                        
+                        <i class="fa-solid fa-heart {% if place['id'] in place_ids_fav %} favorite {% endif %}" id="place-fav" data-id="{{ place['id'] }}" data-title='{{ place["title"] }}' data-image-url="{% if place['images'][0]['crops'] %} {{  place['images'][0]['crops'][0]['url'] }} {% else %} {{ place['images'][0]['url'] }} {% endif %}" data-description='{{ place["audioDescription"] }}'></i>
+                        <i class="fa-solid fa-bookmark {% if place['id'] in place_ids_mark %} bookmark {% endif %}" id="place-mark" data-id="{{ place['id']}}" data-title='{{ place["title"] }}' data-image-url="{% if place['images'][0]['crops'] %} {{  place['images'][0]['crops'][0]['url'] }} {% else %} {{ place['images'][0]['url'] }} {% endif %}"  data-description='{{ place["audioDescription"] }}'></i>                      
+                        {% else %}
+
                     </div>
                     {% endif %}
                 </div>

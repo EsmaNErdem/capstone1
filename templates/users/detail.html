@@ -3,24 +3,23 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <ul>
                 <li>
-                    <a href="/users/{{ user.id }}">Profile</a>
+                    <a href="/users/{{ user.id }}"><i class="fa-solid fa-user"></i>Profile</a>
                 </li>
                 <li>
-                    <a href="/users/{{ user.id }}/activities">Activities</a>
+                    <a href="/users/{{ user.id }}/favorites"><i class="fa-solid fa-heart favorite"></i>Favorites</a>
                 </li>
                 <li>
-                    <a href="/users/{{ user.id }}/events">Events</a>
-                </li>
-                <li>
-                    <a href="/users/{{ user.id }}/places">Places</a>
+                    <a href="/users/{{ user.id }}/bookmarks"><i class="fa-solid fa-bookmark bookmark"></i>Bookmarks</a>
                 </li>
             </ul>
         </div>
-        {% block user_details %}
-        {% endblock %}
+        <div class="col-xs-4 col-md-8">
+            {% block user_details %}
+            {% endblock %}
+        </div>
     </div>
 </div>
 {% endblock %}
