@@ -18,16 +18,8 @@
             </p>  
             {% if g.user %}
             <div class="row justify-content-start">
-                <form action="/events/{{ event['id']}}/favorite" method="POST" class="col-1">
-                    <input type="hidden" name="title" value='{{ event["title"] }}'>
-                    <input type="hidden" name="description" value='{{ event["description"] }}'>
-                    <button class="btn btn-sm"><i class="fa-regular fa-heart"></i></button>
-                </form>
-                <form action="/events/{{ event['id']}}/bookmark" method="POST" class="col-1">
-                    <input type="hidden" name="title" value='{{ event["title"] }}'>
-                    <input type="hidden" name="description" value='{{ event["description"] }}'>
-                    <button class="btn btn-sm"><i class="fa-regular fa-bookmark"></i></button>
-                </form>                    
+                <i class="fa-solid fa-heart {% if event['id'] in event_ids_fav %} favorite {% endif %}" id="event-fav" data-id="{{ event['id']}}" data-title='{{ event["title"] }}' data-description='{{ event["description"] }}'></i>
+                <i class="fa-solid fa-bookmark {% if event['id'] in event_ids_mark %} bookmark {% endif %}" id="event-mark" data-id="{{ event['id']}}" data-title='{{ event["title"] }}'  data-description='{{ event["description"] }}'></i>                  
             </div>
             {% endif %}               
         </li>

@@ -56,19 +56,19 @@ class User(db.Model):
     marked_places = db.relationship(
         'Place',
         secondary='bookmarks',
-        backref='users_mark'
+        backref='users_mark_place'
     )
     
     marked_events = db.relationship(
         'Event',
         secondary='bookmarks',
-        backref='users_mark'
+        backref='users_mark_event'
     )
 
     marked_activities = db.relationship(
         'Activity',
         secondary='bookmarks',
-        backref='users_mark'
+        backref='users_mark_act'
     )
 
     @property
@@ -147,7 +147,7 @@ class Activity(db.Model):
         db.Text,
     )
 
-    users_fav = db.relationship(
+    users_fav= db.relationship(
         'User',
         secondary='favorites',
         backref='fav_activities'
@@ -172,7 +172,7 @@ class Event(db.Model):
         db.Text,
     )
 
-    users_fav = db.relationship(
+    users_fav_event = db.relationship(
         'User',
         secondary='favorites',
         backref='fav_events'
@@ -200,13 +200,13 @@ class Place(db.Model):
         db.Text,
     )
 
-    users_fav = db.relationship(
+    users_fav_place = db.relationship(
         'User',
         secondary='favorites',
         backref='fav_places'
     )
 
-class Favorites(db.Model):
+class Favorite(db.Model):
     """Mapping user favorite"""
 
     __tablename__ = 'favorites'
@@ -238,7 +238,7 @@ class Favorites(db.Model):
     )
 
 
-class Bookmarks(db.Model):
+class Bookmark(db.Model):
     """Mapping user favorite"""
 
     __tablename__ = 'bookmarks'

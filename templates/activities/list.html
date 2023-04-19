@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container">
     <h1 class="display-1">Activities</h1>
-    <ul class="list-group list-group-flush m-2">
+    <ul class="list-group list-group-flush m-2" id="activity-list">
         {% for activity in activities %}
         <li class="list-group-item">
             <div class="row">
@@ -17,19 +17,9 @@
                     <h2  class="text-info"><a href="/activities/{{ activity['id']}}">{{ activity["title"] }}</a></h2>
                     <p>{{ activity["shortDescription"] }}</p>
                     {% if g.user %}
-                    <div class="row justify-content-start">
-                        <form action="/activities/{{ activity['id']}}/favorite" method="POST" class="col-1">
-                            <input type="hidden" name="title" value='{{ activity["title"] }}'>
-                            <input type="hidden" name="image_url" value="{{ activity['images'][0]['crops'][0]['url'] }}"">
-                            <input type="hidden" name="description" value='{{ activity["shortDescription"] }}'>
-                            <button class="btn btn-sm"><i class="fa-regular fa-heart"></i></button>
-                        </form>
-                        <form action="/activities/{{ activity['id']}}/bookmark" method="POST" class="col-1">
-                            <input type="hidden" name="title" value='{{ activity["title"] }}'>
-                            <input type="hidden" name="image_url" value="{{ activity['images'][0]['crops'][0]['url'] }}"">
-                            <input type="hidden" name="description" value='{{ activity["shortDescription"] }}'>
-                            <button class="btn btn-sm"><i class="fa-regular fa-bookmark"></i></button>
-                        </form>                    
+                    <div class="row justify-content-start"> 
+                        <i class="fa-solid fa-heart {% if activity['id'] in activity_ids_fav %} favorite {% endif %}" id="activity-fav" data-id="{{ activity['id'] }}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['images'][0]['crops'][0]['url'] }}" data-description='{{ activity["shortDescription"] }}'></i>
+                        <i class="fa-solid fa-bookmark {% if activity['id'] in activity_ids_mark %} bookmark {% endif %}" id="activity-mark" data-id="{{ activity['id']}}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['images'][0]['crops'][0]['url'] }}" data-description='{{ activity["shortDescription"] }}'></i>                      
                     </div>
                     {% endif %}
                 </div>

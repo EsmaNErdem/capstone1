@@ -1,12 +1,12 @@
 import os
 
-from flask import Flask, render_template, request, flash, redirect, session, g, url_for
+from flask import Flask, render_template, request, flash, redirect, session, g, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 
 from forms import UserSignUpForm, LoginForm, ChangePasswordForm
-from models import db, connect_db, User
+from models import db, connect_db, User, Activity, Event, Place, Favorite, Bookmark
 from api import Alerts, Centers, Info, Activities, Events, Places
 
 CURR_USER_KEY = "curr_user"
@@ -197,14 +197,18 @@ def show_activities():
     """Shows list of activities with short description"""
     
     activities_data = activities.get_response()
-    return render_template('activities/list.html', activities=activities_data)
+    activity_ids_fav = [activity.id for activity in g.user.fav_activities]
+    activity_ids_mark = [activity.id for activity in g.user.marked_activities]
+    return render_template('activities/list.html', activities=activities_data, activity_ids_fav=activity_ids_fav, activity_ids_mark=activity_ids_mark)
 
 @app.route('/activities/<activity_id>')
 def show_activity(activity_id):
     """Shows selected Activity with detailed info"""
     
     activity_data = activities.get_activity(activity_id)
-    return render_template('activities/show.html', activity=activity_data[0])
+    favored = Activity.query.get(activity_id) in g.user.fav_activities
+    marked = Activity.query.get(activity_id) in g.user.marked_activities
+    return render_template('activities/show.html', activity=activity_data[0], favored=favored, marked=marked)
 
 
 # ------------------EVENTS-------------------
@@ -214,7 +218,9 @@ def show_events():
     """Shows list of events with short description"""
     
     events_data = events.get_response()
-    return render_template('events/list.html', events=events_data)
+    event_ids_fav = [event.id for event in g.user.fav_events]
+    event_ids_mark = [event.id for event in g.user.marked_events]
+    return render_template('events/list.html', events=events_data, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
 
 # @app.route('/events/<event_id>')
 # def show_event(event_id):
@@ -239,14 +245,11 @@ def show_place(place_id):
     """Shows selected place with detailed info"""
     
     place_data = places.get_places(place_id)
+
     return render_template('places/show.html', place=place_data[0])
 
 # ------------------HOMEPAGE------------
 # Homepage and Error Pages
-
-    # import pdb
-    # pdb.set_trace()
-    
 
 @app.route('/')
 def show_homepage_info():
@@ -282,3 +285,158 @@ def page_not_authorized(e):
     """Show 404 NOT FOUND page."""
 
     return render_template('404.html'), 401
+
+
+# -----------------Restful API Routes-------------------
+
+# Activity
+@app.route("/api/activity/favorite", methods=["POST"])
+def add_fav_act():
+    """Creates Activity instance and adds it to user's fav list"""
+    
+    id = request.json['id']
+
+    if not Activity.query.get(id):
+        activity = Activity(
+            id = request.json['id'],
+            image_url = request.json['imageUrl'],
+            title = request.json['title'],
+            description = request.json['description']
+        )
+        db.session.add(activity)
+        db.session.commit()
+    else: 
+        activity = Activity.query.get(id) 
+    
+    fav_activities = Favorite(
+        user_id = g.user.id,
+        activity_id = activity.id
+    )
+    db.session.add(fav_activities)
+    db.session.commit()
+
+    return (jsonify(message="Added to Favorite"))
+
+@app.route("/api/activity/<activity_id>/favorite", methods=["DELETE"])
+def remove_fav_act(activity_id):
+    """Removes from activity from user favorite and from database"""
+
+    activity = Activity.query.filter_by(id=activity_id).first_or_404()
+    g.user.fav_activities.remove(activity)
+    db.session.commit()
+
+    return jsonify(message="Deleted")
+
+@app.route("/api/activity/bookmark", methods=["POST"])
+def add_mark_act():
+    """Creates Activity instance and adds it to user's bookmark list"""
+
+    id = request.json['id']
+    
+    if not Activity.query.get(id):
+        activity = Activity(
+            id = request.json['id'],
+            image_url = request.json['imageUrl'],
+            title = request.json['title'],
+            description = request.json['description']
+        )
+        db.session.add(activity)
+        db.session.commit()
+    else: 
+        activity = Activity.query.get(id) 
+    
+    mark_activities = Bookmark(
+        user_id = g.user.id,
+        activity_id = activity.id
+    )
+    db.session.add(mark_activities)
+    db.session.commit()
+
+    return (jsonify(message="Added to Bookmark"))
+
+@app.route("/api/activity/<activity_id>/bookmark", methods=["DELETE"])
+def remove_mark_act(activity_id):
+    """Removes from activity from user bookmark and from database"""
+
+    activity = Activity.query.filter_by(id=activity_id).first_or_404()
+    g.user.marked_activities.remove(activity)
+    db.session.commit()
+    
+    return jsonify(message="Deleted")
+    
+
+# Event
+@app.route("/api/event/favorite", methods=["POST"])
+def add_fav_event():
+    """Creates Event instance and adds it to user's fav list"""
+    
+    id = request.json['id']
+
+    if not Event.query.get(id):
+        event = Event(
+            id = request.json['id'],
+            title = request.json['title'],
+            description = request.json['description']
+        )
+        db.session.add(event)
+        db.session.commit()
+    else: 
+        event = Event.query.get(id) 
+    
+    fav_events = Favorite(
+        user_id = g.user.id,
+        event_id = event.id
+    )
+    db.session.add(fav_events)
+    db.session.commit()
+
+    return (jsonify(message="Added to Favorite"))
+
+@app.route("/api/event/<event_id>/favorite", methods=["DELETE"])
+def remove_fav_event(event_id):
+    """Removes from event from user favorite and from database"""
+
+    event = Event.query.filter_by(id=event_id).first_or_404()
+    g.user.fav_events.remove(event)
+    db.session.commit()
+
+    return jsonify(message="Deleted")
+
+@app.route("/api/event/bookmark", methods=["POST"])
+def add_mark_event():
+    """Creates Event instance and adds it to user's bookmark list"""
+
+    id = request.json['id']
+    
+    if not Event.query.get(id):
+        event = Event(
+            id = request.json['id'],
+            title = request.json['title'],
+            description = request.json['description']
+        )
+        db.session.add(event)
+        db.session.commit()
+    else: 
+        event = Event.query.get(id) 
+    
+    mark_events = Bookmark(
+        user_id = g.user.id,
+        event_id = event.id
+    )
+    db.session.add(mark_events)
+    db.session.commit()
+
+    return (jsonify(message="Added to Bookmark"))
+
+@app.route("/api/event/<event_id>/bookmark", methods=["DELETE"])
+def remove_mark_event(event_id):
+    """Removes from event from user bookmark and from database"""
+
+    event = Event.query.filter_by(id=event_id).first_or_404()
+    g.user.marked_events.remove(event)
+    db.session.commit()
+    
+    # import pdb
+    # pdb.set_trace()
+    return jsonify(message="Deleted")
+    
