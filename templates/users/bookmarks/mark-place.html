@@ -1,0 +1,32 @@
+{% extends 'users/bookmarks/bookmarks.html' %}
+
+{% block bookmark_content %}
+
+<ul class="list-group list-group-flush m-2">
+    {% for place in places %}
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-xs-12 col-md">
+                <a href="/places/{{ place['id']}}">
+                    <img src='{{ place["image_url"]  }}' alt='place image' class="img-fluid">
+                </a>
+            </div>
+            <div class="col-xs-12 col-md-7">
+                <h2 class="text-info"><a href="/places/{{ place['id']}}">{{ place["title"] }}</a></h2>
+                <p>{{ place["description"] }}</p>
+                {% if g.user %}
+                <div class="row justify-content-start">                    
+                    
+                    <i class="fa-solid fa-heart {% if place['id'] in place_ids_fav %} favorite {% endif %}" id="place-fav" data-id="{{ place['id'] }}" data-title='{{ place["title"] }}' data-image-url='{{ place["image_url"]  }}' data-description='{{ place["description"] }}'></i>
+                    <i class="fa-solid fa-bookmark {% if place['id'] in place_ids_mark %} bookmark {% endif %}" id="place-mark" data-id="{{ place['id']}}" data-title='{{ place["title"] }}' data-image-url='{{ place["image_url"]  }}'  data-description='{{ place["daudioDescription"] }}'></i>   
+
+                </div>
+                {% endif %}
+            </div>
+            
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

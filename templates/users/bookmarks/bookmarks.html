@@ -1,0 +1,15 @@
+
+{% extends 'users/detail.html' %}
+{% block user_details %}
+<div class="container">
+    <h1 class="display-1">Bookmarks</h1>
+    <div class="row">
+        <a href="/users/{{ user.id }}/bookmarks/activities" class="btn col-sm-4">{{ activities | length }} - Activities</a>
+        <a href="/users/{{ user.id }}/bookmarks/events" class="btn col-sm-4">{{ events | length }} - Events</a>
+        <a href="/users/{{ user.id }}/bookmarks/places" class="btn col-sm-4">{{ places | length }} - Places</a>
+    </div>
+    {% block bookmark_content %}
+    {% endblock %}    
+</div>
+
+{% endblock %}

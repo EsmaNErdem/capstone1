@@ -190,6 +190,7 @@ def delete_user():
 
     return redirect("/signup")
 
+# User-Favorites
 
 @app.route('/users/<int:user_id>/favorites')
 def user_favorite(user_id):
@@ -203,7 +204,7 @@ def user_favorite(user_id):
     event_fav = g.user.fav_events
     place_fav = g.user.fav_places
     
-    return render_template('users/favorites.html', user=user, activities=activity_fav, events=event_fav, places=place_fav)
+    return render_template('users/favorites/favorites.html', user=user, activities=activity_fav, events=event_fav, places=place_fav)
 
 @app.route('/users/<int:user_id>/favorites/activities')
 def user_favorite_activities(user_id):
@@ -217,8 +218,9 @@ def user_favorite_activities(user_id):
     event_fav = g.user.fav_events
     place_fav = g.user.fav_places
     activity_ids_fav = [activity.id for activity in g.user.fav_activities]
+    activity_ids_mark = [activity.id for activity in g.user.marked_activities]
 
-    return render_template('users/fav-activity.html', user=user, activities=activity_fav, events=event_fav, places=place_fav, activity_ids_fav=activity_ids_fav)
+    return render_template('users/favorites/fav-activity.html', user=user, activities=activity_fav, events=event_fav, places=place_fav, activity_ids_fav=activity_ids_fav, activity_ids_mark=activity_ids_mark)
 
 @app.route('/users/<int:user_id>/favorites/events')
 def user_favorite_events(user_id):
@@ -232,8 +234,9 @@ def user_favorite_events(user_id):
     event_fav = g.user.fav_events
     place_fav = g.user.fav_places
     event_ids_fav = [event.id for event in g.user.fav_events]
+    event_ids_mark = [event.id for event in g.user.marked_events]    
 
-    return render_template('users/fav-event.html', user=user, events=event_fav, activities=activity_fav, places=place_fav, event_ids_fav=event_ids_fav)
+    return render_template('users/favorites/fav-event.html', user=user, events=event_fav, activities=activity_fav, places=place_fav, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
 
 @app.route('/users/<int:user_id>/favorites/places')
 def user_favorite_places(user_id):
@@ -247,9 +250,75 @@ def user_favorite_places(user_id):
     activity_fav = g.user.fav_activities
     event_fav = g.user.fav_events
     place_ids_fav = [place.id for place in g.user.fav_places]
+    place_ids_mark = [place.id for place in g.user.marked_places]
+
+    return render_template('users/favorites/fav-place.html', user=user, places=place_fav, events=event_fav, activities=activity_fav, place_ids_fav=place_ids_fav, place_ids_mark=place_ids_mark)
+
+# User-Bookmarks
+
+@app.route('/users/<int:user_id>/bookmarks')
+def user_bookmark(user_id):
+    """Show user bookmarks."""
+
+    if g.user.id != user_id or not g.user:
+        return redirect(f"/users/{g.user.id}")
+
+    user = User.query.get_or_404(user_id)
+    activity_mark = g.user.marked_activities
+    event_mark = g.user.marked_events
+    place_mark = g.user.marked_places
+    
+    return render_template('users/bookmarks/bookmarks.html', user=user, activities=activity_mark, events=event_mark, places=place_mark)
+
+@app.route('/users/<int:user_id>/bookmarks/activities')
+def user_bookmark_activities(user_id):
+    """Show user activities bookmarks."""
+
+    if g.user.id != user_id or not g.user:
+        return redirect(f"/users/{g.user.id}")
+    
+    user = User.query.get_or_404(user_id)    
+    activity_mark = g.user.marked_activities
+    event_mark = g.user.marked_events
+    place_mark = g.user.marked_places
+    activity_ids_mark = [activity.id for activity in g.user.marked_activities]
+    activity_ids_fav = [activity.id for activity in g.user.fav_activities]
 
 
-    return render_template('users/fav-place.html', user=user, places=place_fav, events=event_fav, activities=activity_fav, place_ids_fav=place_ids_fav)
+    return render_template('users/bookmarks/mark-activity.html', user=user, activities=activity_mark, events=event_mark, places=place_mark, activity_ids_mark=activity_ids_mark, activity_ids_fav=activity_ids_fav)
+
+@app.route('/users/<int:user_id>/bookmarks/events')
+def user_bookmark_events(user_id):
+    """Show user events bookmarks."""
+
+    if g.user.id != user_id or not g.user:
+        return redirect(f"/users/{g.user.id}")
+    
+    user = User.query.get_or_404(user_id)    
+    activity_mark = g.user.marked_activities
+    event_mark = g.user.marked_events
+    place_mark = g.user.marked_places
+    event_ids_mark = [event.id for event in g.user.marked_events]
+
+    return render_template('users/bookmarks/mark-event.html', user=user, events=event_mark, activities=activity_mark, places=place_mark, event_ids_mark=event_ids_mark)
+
+@app.route('/users/<int:user_id>/bookmarks/places')
+def user_bookmark_places(user_id):
+    """Show user places bookmarks."""
+
+    if g.user.id != user_id or not g.user:
+        return redirect(f"/users/{g.user.id}")
+    
+    user = User.query.get_or_404(user_id)    
+    place_mark = g.user.marked_places    
+    activity_mark = g.user.marked_activities
+    event_mark = g.user.marked_events
+    place_ids_mark = [place.id for place in g.user.marked_places]
+    place_ids_fav = [place.id for place in g.user.fav_places]
+
+    return render_template('users/bookmarks/mark-place.html', user=user, places=place_mark, events=event_mark, activities=activity_mark, place_ids_mark=place_ids_mark, place_ids_fav=place_ids_fav)
+
+
 # ----------------ACTIVITIES---------------
          
     # import pdb

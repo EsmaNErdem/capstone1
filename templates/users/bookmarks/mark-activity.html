@@ -1,0 +1,27 @@
+{% extends 'users/bookmarks/bookmarks.html' %}
+
+{% block bookmark_content %}
+
+<ul class="list-group list-group-flush m-2" id="activity-list">
+    {% for activity in activities %}
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-xs-12 col-md">
+                <a href="/activities/{{ activity['id']}}">
+                    <img src="{{ activity['image_url'] }}" alt="activity image" class="img-fluid">
+                </a>
+            </div>
+            <div class="col-xs-12 col-md-7">
+                <h2  class="text-info"><a href="/activities/{{ activity['id']}}">{{ activity["title"] }}</a></h2>
+                <p>{{ activity["description"] }}</p>
+                <div class="row justify-content-start"> 
+                    <i class="fa-solid fa-heart {% if activity['id'] in activity_ids_fav %} favorite {% endif %}" id="activity-fav" data-id="{{ activity['id'] }}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['image_url'] }}" data-description='{{ activity["description"] }}'></i>
+                    <i class="fa-solid fa-bookmark {% if activity['id'] in activity_ids_mark %} bookmark {% endif %}" id="activity-mark" data-id="{{ activity['id']}}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['image_url']}}" data-description='{{ activity["description"] }}'></i>                      
+                </div>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
