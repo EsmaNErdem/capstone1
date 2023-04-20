@@ -1,0 +1,32 @@
+{% extends 'base.html'  %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-8">
+            <h1 class="title-1">Enter your email.</h1>
+            <form method="POST">
+
+                {{ form.hidden_tag() }}
+
+                {% for field in form
+                    if field.widget.input_type != 'hidden' %}
+                <p>
+                    {{ field.label }}
+                    {{ field(class_="form-control") }}
+
+                    {% for error in field.errors %}
+                    <span class="form-text text-danger">{{ error }}</span>
+                    {% endfor %}
+                </p>
+                {% endfor %}   
+                <button class="btn btn-danger" type="submit">Reset Password</button>
+
+            </form>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}

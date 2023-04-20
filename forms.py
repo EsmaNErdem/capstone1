@@ -36,10 +36,17 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[Length(min=6)])
     remember_me = BooleanField('Remember me')
 
-class ChangePasswordForm(FlaskForm):
+class ForgotPasswordForm(FlaskForm):
+    """Creates email enter form to confrim"""
+
+    email = StringField(
+        "Email", 
+        validators=[InputRequired(), Email()],
+    )
+
+class ResetPasswordForm(FlaskForm):
     """Form for resetting password"""
 
-    password = PasswordField('Password', validators=[Length(min=6)])
     new_password = PasswordField('New Password', [
         DataRequired(),
         EqualTo('confirm', message='Passwords must match')

@@ -53,6 +53,10 @@ class User(db.Model):
         nullable=False,
     )
 
+    reset_token = db.Column(
+        db.Text,
+    )
+    
     marked_places = db.relationship(
         'Place',
         secondary='bookmarks',
@@ -81,7 +85,7 @@ class User(db.Model):
         return f"<User #{self.id}: {self.username}, {self.email}>"
 
     @classmethod
-    def signup(cls, username, email, password, first_name, last_name, image_url):
+    def signup(cls, username, email, password, first_name, last_name, image_url, reset_token):
         """Sign up user.
 
         Hashes password and adds user to system.
@@ -96,6 +100,7 @@ class User(db.Model):
             first_name=first_name,
             last_name=last_name,
             image_url=image_url,
+            reset_token=reset_token
         )
 
         db.session.add(user)
@@ -120,9 +125,16 @@ class User(db.Model):
                 return user
 
         return False
+    
+    @classmethod
+    def reset(cls, user, password):
+        """Bycrypts user's new password"""
 
+        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+        user.password = hashed_pwd
+        user.reset_token = None
 
-# -------------------------create class function to change password, 
+        return user
 
 
 class Activity(db.Model):

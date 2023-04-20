@@ -3,9 +3,9 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
+import secrets
 
-
-from forms import UserSignUpForm, LoginForm, ChangePasswordForm
+from forms import UserSignUpForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
 from models import db, connect_db, User, Activity, Event, Place, Favorite, Bookmark
 from api import Alerts, Centers, Info, Activities, Events, Places
 
@@ -34,6 +34,17 @@ activities = Activities()
 events = Events()
 places = Places()
 
+from flask_mail import Mail, Message
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'wickedacadia40@gmail.com'
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = 'wickedacadia40@gmail.com'
+
+mail = Mail(app)
+
 # ------------USER ROUTES---------------#
 # SIGNUP/LOGIN/LOGOUT
 
@@ -53,7 +64,7 @@ def do_login(user, remember ):
 
     session[CURR_USER_KEY] = user.id
     if remember:
-                session.permanent = True
+        session.permanent = True
 
 
 def do_logout():
@@ -136,6 +147,76 @@ def logout():
     flash("You logged out.", "success")
     return redirect('/login')
 
+# @app.route('/send_email')
+# def send_email():
+#     message = Message('Wicked Acadia sends her regards!', recipients=['esmaerdem94@gmail.com'])
+#     message.body = 'This is a test email sent from a Flask application.'
+#     try: 
+#         mail.send(message)
+#         return 'Email sent!'
+#     except Exception as e:
+#         print(e)
+#         return 'Email failed!'
+
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    """Sends user a token to start reset password process"""
+
+    if g.user:
+        return redirect(f"/users/{g.user.id}")
+    
+    form = ForgotPasswordForm()
+
+    if form.validate_on_submit():
+        email = form.email.data
+        user = User.query.filter_by(email=email).first()
+        if user:
+            token = secrets.token_hex(16)
+            user.reset_token = token
+            db.session.commit()
+            reset_url = url_for('reset_password', token=token, _external=True)
+            msg = Message('Password Reset Request', recipients=[email])
+            msg.body = f'''To reset your password, please visit the following link:
+            {reset_url}
+
+            If you did not make this request then simply ignore this email and no changes will be made.
+            Wicked Acadia sends her regards!
+            '''
+            try: 
+                mail.send(msg)
+                flash('An email has been sent with instructions to reset your password.', 'info')
+                return redirect(url_for('login'))
+            except Exception as e:
+                print("****************************", e)
+                flash("Failed, please try again", 'danger')
+                return render_template(url_for('forgot_password'))  
+        else:
+            flash("No account found with this email, please try again", 'danger')
+            return render_template('/users/forgot-psw.html', form=form)  
+           
+    return render_template('/users/forgot-psw.html', form=form)
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    """"""
+
+    user = User.query.filter_by(reset_token=token).first()
+    
+    if not user:
+        flash('Invalid or expired token. Please try again.', 'danger')
+        return redirect(url_for('forgot_password'))
+    
+    form = ResetPasswordForm()
+
+    if request.method == 'POST':
+        new_password = form.new_password.data
+        user = User.reset(user, new_password)
+
+        db.session.commit()
+        flash('Your password has been reset. You can now log in with your new password.', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template('users/reset.html', form=form)
 # USER PROFILE ROUTES
 
 @app.route('/users/<int:user_id>')
