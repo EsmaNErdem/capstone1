@@ -55,6 +55,7 @@ class User(db.Model):
 
     reset_token = db.Column(
         db.Text,
+        default=None,
     )
     
     marked_places = db.relationship(
@@ -249,6 +250,18 @@ class Favorite(db.Model):
         db.ForeignKey('activities.id', ondelete='cascade'),
     )
 
+    created_at = db.Column(
+        db.DateTime, 
+        nullable=False, 
+        default=datetime.now
+    )
+    
+    @property
+    def friendly_time(self):
+        """Convert datetime to human readable text"""
+
+        return self.created_at.strftime("%a %b %-d  %Y, %-I:%M %p")
+
 
 class Bookmark(db.Model):
     """Mapping user favorite"""
@@ -281,3 +294,14 @@ class Bookmark(db.Model):
         db.ForeignKey('activities.id', ondelete='cascade'),
     )
     
+    created_at = db.Column(
+        db.DateTime, 
+        nullable=False, 
+        default=datetime.now
+    )
+    
+    @property
+    def friendly_time(self):
+        """Convert datetime to human readable text"""
+
+        return self.created_at.strftime("%a %b %-d  %Y, %-I:%M %p")

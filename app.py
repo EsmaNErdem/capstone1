@@ -3,7 +3,7 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
-import secrets
+from flask_sqlalchemy import Pagination
 
 from forms import UserSignUpForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
 from models import db, connect_db, User, Activity, Event, Place, Favorite, Bookmark
@@ -35,6 +35,7 @@ events = Events()
 places = Places()
 
 from flask_mail import Mail, Message
+import secrets
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
@@ -101,10 +102,10 @@ def signup():
                 first_name = form.first_name.data,
                 last_name = form.last_name.data,
                 image_url=form.image_url.data or User.image_url.default.arg,
+                reset_token= None,
             )
             db.session.commit()
             
-
         except IntegrityError:
             flash("Invalid username, please try again", 'danger')
             return render_template('users/signup.html', form=form)
@@ -147,17 +148,6 @@ def logout():
     flash("You logged out.", "success")
     return redirect('/login')
 
-# @app.route('/send_email')
-# def send_email():
-#     message = Message('Wicked Acadia sends her regards!', recipients=['esmaerdem94@gmail.com'])
-#     message.body = 'This is a test email sent from a Flask application.'
-#     try: 
-#         mail.send(message)
-#         return 'Email sent!'
-#     except Exception as e:
-#         print(e)
-#         return 'Email failed!'
-
 @app.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
     """Sends user a token to start reset password process"""
@@ -177,9 +167,11 @@ def forgot_password():
             reset_url = url_for('reset_password', token=token, _external=True)
             msg = Message('Password Reset Request', recipients=[email])
             msg.body = f'''To reset your password, please visit the following link:
+
             {reset_url}
 
             If you did not make this request then simply ignore this email and no changes will be made.
+
             Wicked Acadia sends her regards!
             '''
             try: 
@@ -187,7 +179,7 @@ def forgot_password():
                 flash('An email has been sent with instructions to reset your password.', 'info')
                 return redirect(url_for('login'))
             except Exception as e:
-                print("****************************", e)
+                print(e)
                 flash("Failed, please try again", 'danger')
                 return render_template(url_for('forgot_password'))  
         else:
@@ -217,6 +209,7 @@ def reset_password(token):
         return redirect(url_for('login'))
     
     return render_template('users/reset.html', form=form)
+
 # USER PROFILE ROUTES
 
 @app.route('/users/<int:user_id>')
@@ -402,14 +395,40 @@ def user_bookmark_places(user_id):
 
 # ----------------ACTIVITIES---------------
          
-    # import pdb
-    # pdb.set_trace()
 
 @app.route('/activities')
 def show_activities():
     """Shows list of activities with short description"""
+
+    if not g.user:
+        return redirect("/login")
     
-    activities_data = activities.get_response()
+    try: 
+        activities_data = activities.get_response()
+    except: 
+        flash("There was an API error. Pleace try again later", 'danger')
+        return render_template('homepage/api-error.html')
+    
+    
+
+    # page = int(request.args.get('page', 1))
+    # per_page = 20 
+    # offset = (page - 1) * per_page 
+    # items_pagination = activities_data[offset:offset+per_page] 
+    # total = len(activities_data) 
+    # pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
+    # , pagination=pagination
+
+
+
+#     File "/home/esma/springboard/capstone1/app.py", line 424, in show_activities
+#     pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total)
+#   File "/home/esma/springboard/capstone1/venv/lib/python3.10/site-packages/flask_sqlalchemy/pagination.py", line 69, in __init__
+#     items = self._query_items()
+#   File "/home/esma/springboard/capstone1/venv/lib/python3.10/site-packages/flask_sqlalchemy/pagination.py", line 156, in _query_items
+#     raise NotImplementedError
+# NotImplementedError
+
     activity_ids_fav = [activity.id for activity in g.user.fav_activities]
     activity_ids_mark = [activity.id for activity in g.user.marked_activities]
 
@@ -418,8 +437,13 @@ def show_activities():
 @app.route('/activities/<activity_id>')
 def show_activity(activity_id):
     """Shows selected Activity with detailed info"""
+
+    try: 
+            activity_data = activities.get_activity(activity_id)
+    except: 
+        flash("There was an API error. Pleace try again later", 'danger')
+        return render_template('homepage/api-error.html')
     
-    activity_data = activities.get_activity(activity_id)
     favored = Activity.query.get(activity_id) in g.user.fav_activities
     marked = Activity.query.get(activity_id) in g.user.marked_activities
 
@@ -432,7 +456,12 @@ def show_activity(activity_id):
 def show_events():
     """Shows list of events with short description"""
     
-    events_data = events.get_response()
+    try: 
+            events_data = events.get_response()
+    except: 
+        flash("There was an API error. Pleace try again later", 'danger')
+        return render_template('homepage/api-error.html')
+    
     event_ids_fav = [event.id for event in g.user.fav_events]
     event_ids_mark = [event.id for event in g.user.marked_events]
 
@@ -445,7 +474,12 @@ def show_events():
 def show_places():
     """Shows list of places with short description"""
     
-    places_data = places.get_response()    
+    try: 
+        places_data = places.get_response()
+    except: 
+        flash("There was an API error. Pleace try again later", 'danger')
+        return render_template('homepage/api-error.html')  
+      
     place_ids_fav = [place.id for place in g.user.fav_places]
     place_ids_mark = [place.id for place in g.user.marked_places]
    
@@ -455,7 +489,12 @@ def show_places():
 def show_place(place_id):
     """Shows selected place with detailed info"""
     
-    place_data = places.get_places(place_id)
+    try: 
+        place_data = places.get_places(place_id)
+    except: 
+        flash("There was an API error. Pleace try again later", 'danger')
+        return render_template('homepage/api-error.html')
+    
     favored = Place.query.get(place_id) in g.user.fav_places
     marked = Place.query.get(place_id) in g.user.marked_places
 
@@ -467,24 +506,38 @@ def show_place(place_id):
 @app.route('/')
 def show_homepage_info():
     """Show homepge anf info about about Acadia National Park"""
-
-    info_data = info.get_response()
+    try: 
+        info_data = info.get_response()
+    except: 
+        flash("There was an API error. Pleace try again later", 'danger')
+        return render_template('homepage/api-error.html')
     return render_template('homepage/info.html', info=info_data[0])
 
 @app.route('/alerts')
 def show_alerts():
     """Show alerts"""
 
-    info_data = info.get_response()
-    alerts_data = alerts.get_response()
+    try:
+        info_data = info.get_response()
+        alerts_data = alerts.get_response() 
+    except: 
+        flash("There was an API error. Pleace try again later", 'danger')
+        return render_template('homepage/api-error.html')
+    
     return render_template('homepage/alerts.html', alerts=alerts_data, info=info_data[0])
 
 @app.route('/centers')
 def show_centers():
     """Show visitor centers"""
 
-    centers_data = centers.get_response()
-    info_data = info.get_response()
+    
+    try:
+        centers_data = centers.get_response()
+        info_data = info.get_response()
+    except: 
+        flash("There was an API error. Pleace try again later", 'danger')
+        return render_template('homepage/api-error.html')
+    
     return render_template('homepage/visitor-center.html', centers=centers_data, info=info_data[0])
 
 @app.errorhandler(404)
@@ -727,3 +780,15 @@ def remove_mark_place(place_id):
     db.session.commit()
     
     return jsonify(message="Deleted")
+
+
+# from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+
+# Setup Flask-Login
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+
+# # working below
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User.query.get(user_id)
