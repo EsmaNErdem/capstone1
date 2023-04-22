@@ -216,7 +216,11 @@ def reset_password(token):
 def profile(user_id):
     """Show user profile."""
 
-    if g.user.id != user_id or not g.user:
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if g.user.id != user_id:
         return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)
@@ -270,7 +274,11 @@ def delete_user():
 def user_favorite(user_id):
     """Show user favorites."""
 
-    if g.user.id != user_id or not g.user:
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if g.user.id != user_id:
         return redirect(f"/users/{g.user.id}")
 
     user = User.query.get_or_404(user_id)
@@ -284,7 +292,11 @@ def user_favorite(user_id):
 def user_favorite_activities(user_id):
     """Show user activities favorites."""
 
-    if g.user.id != user_id or not g.user:
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if g.user.id != user_id:
         return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
@@ -300,7 +312,11 @@ def user_favorite_activities(user_id):
 def user_favorite_events(user_id):
     """Show user events favorites."""
 
-    if g.user.id != user_id or not g.user:
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if g.user.id != user_id:
         return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
@@ -316,7 +332,11 @@ def user_favorite_events(user_id):
 def user_favorite_places(user_id):
     """Show user places favorites."""
 
-    if g.user.id != user_id or not g.user:
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if g.user.id != user_id:
         return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
@@ -334,7 +354,11 @@ def user_favorite_places(user_id):
 def user_bookmark(user_id):
     """Show user bookmarks."""
 
-    if g.user.id != user_id or not g.user:
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if g.user.id != user_id:
         return redirect(f"/users/{g.user.id}")
 
     user = User.query.get_or_404(user_id)
@@ -348,7 +372,11 @@ def user_bookmark(user_id):
 def user_bookmark_activities(user_id):
     """Show user activities bookmarks."""
 
-    if g.user.id != user_id or not g.user:
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if g.user.id != user_id:
         return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
@@ -365,7 +393,11 @@ def user_bookmark_activities(user_id):
 def user_bookmark_events(user_id):
     """Show user events bookmarks."""
 
-    if g.user.id != user_id or not g.user:
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if g.user.id != user_id:
         return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
@@ -380,7 +412,11 @@ def user_bookmark_events(user_id):
 def user_bookmark_places(user_id):
     """Show user places bookmarks."""
 
-    if g.user.id != user_id or not g.user:
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    if g.user.id != user_id:
         return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
@@ -400,8 +436,6 @@ def user_bookmark_places(user_id):
 def show_activities():
     """Shows list of activities with short description"""
 
-    if not g.user:
-        return redirect("/login")
     
     try: 
         activities_data = activities.get_response()
@@ -409,6 +443,8 @@ def show_activities():
         flash("There was an API error. Pleace try again later", 'danger')
         return render_template('homepage/api-error.html')
     
+    if not g.user:
+        return render_template('activities/list.html', activities=activities_data)
     
 
     # page = int(request.args.get('page', 1))
@@ -439,11 +475,14 @@ def show_activity(activity_id):
     """Shows selected Activity with detailed info"""
 
     try: 
-            activity_data = activities.get_activity(activity_id)
+        activity_data = activities.get_activity(activity_id)
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
         return render_template('homepage/api-error.html')
     
+    if not g.user:
+        return render_template('activities/show.html', activity=activity_data[0])
+
     favored = Activity.query.get(activity_id) in g.user.fav_activities
     marked = Activity.query.get(activity_id) in g.user.marked_activities
 
@@ -457,10 +496,13 @@ def show_events():
     """Shows list of events with short description"""
     
     try: 
-            events_data = events.get_response()
+        events_data = events.get_response()
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
         return render_template('homepage/api-error.html')
+    
+    if not g.user:
+        return render_template('events/list.html', events=events_data,)
     
     event_ids_fav = [event.id for event in g.user.fav_events]
     event_ids_mark = [event.id for event in g.user.marked_events]
@@ -479,6 +521,9 @@ def show_places():
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
         return render_template('homepage/api-error.html')  
+    
+    if not g.user:
+        return render_template('places/list.html', places=places_data)    
       
     place_ids_fav = [place.id for place in g.user.fav_places]
     place_ids_mark = [place.id for place in g.user.marked_places]
@@ -495,6 +540,9 @@ def show_place(place_id):
         flash("There was an API error. Pleace try again later", 'danger')
         return render_template('homepage/api-error.html')
     
+    if not g.user:
+        return render_template('places/show.html', place=place_data[0])
+        
     favored = Place.query.get(place_id) in g.user.fav_places
     marked = Place.query.get(place_id) in g.user.marked_places
 
@@ -506,11 +554,14 @@ def show_place(place_id):
 @app.route('/')
 def show_homepage_info():
     """Show homepge anf info about about Acadia National Park"""
+
     try: 
         info_data = info.get_response()
-    except: 
+    except Exception as e:
+        print(f"API Error****************************: {e}") 
         flash("There was an API error. Pleace try again later", 'danger')
         return render_template('homepage/api-error.html')
+    
     return render_template('homepage/info.html', info=info_data[0])
 
 @app.route('/alerts')
@@ -530,7 +581,6 @@ def show_alerts():
 def show_centers():
     """Show visitor centers"""
 
-    
     try:
         centers_data = centers.get_response()
         info_data = info.get_response()

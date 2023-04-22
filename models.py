@@ -238,16 +238,19 @@ class Favorite(db.Model):
     place_id = db.Column(
         db.Text,
         db.ForeignKey('places.id', ondelete='cascade'),
+        unique=True,
     )
 
     event_id = db.Column(
         db.Text,
         db.ForeignKey('events.id', ondelete='cascade'),
+        unique=True,
     )
     
     activity_id = db.Column(
         db.Text,
         db.ForeignKey('activities.id', ondelete='cascade'),
+        unique=True,
     )
 
     created_at = db.Column(
@@ -282,16 +285,19 @@ class Bookmark(db.Model):
     place_id = db.Column(
         db.Text,
         db.ForeignKey('places.id', ondelete='cascade'),
+        unique=True,
     )
 
     event_id = db.Column(
         db.Text,
         db.ForeignKey('events.id', ondelete='cascade'),
+        unique=True,
     )
     
     activity_id = db.Column(
         db.Text,
         db.ForeignKey('activities.id', ondelete='cascade'),
+        unique=True,
     )
     
     created_at = db.Column(

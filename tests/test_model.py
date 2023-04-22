@@ -1,6 +1,6 @@
-"""User model tests."""
+"""Database Model tests."""
 
-#    python -m unittest tests/test_user_model.py
+#    python -m unittest tests/test_model.py
 
 
 import os
@@ -16,15 +16,14 @@ from app import app
 db.create_all()
 
 class UserModelTestCase(TestCase):
-    """Test views for messages."""
+    """Tests User Database Model."""
 
     def setUp(self):
         """Create test client, add sample data."""
 
-        os.environ['DATABASE_URL'] = "postgresql:///warbler-test"
+        os.environ['DATABASE_URL'] = "postgresql:///wicked-test"
         app.config['SQLALCHEMY_ECHO'] = False
         app.config['TESTING'] = True
-        self.client = app.test_client()
         db.drop_all()
         db.create_all()
 

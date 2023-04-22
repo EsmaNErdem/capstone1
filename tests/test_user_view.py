@@ -48,8 +48,6 @@ class UserViewTestCase(TestCase):
         place1 = Place(id="place1", title="title", description="test-desc", image_url="test")
         place2 = Place(id="place2", title="title", description="test-desc", image_url="test")
 
-        # import pdb
-        # pdb.set_trace()
         db.session.add_all([activity1, activity2, event, place1, place2])
         db.session.commit()
 
@@ -66,7 +64,6 @@ class UserViewTestCase(TestCase):
 
         db.session.add_all([marked_events, marked_place1, marked_place2])
         db.session.commit()
-
 
     def tearDown(self):
         """Runs after every test"""
