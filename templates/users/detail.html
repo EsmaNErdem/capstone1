@@ -14,6 +14,14 @@
                 <li>
                     <a href="/users/{{ user.id }}/bookmarks"><i class="fa-solid fa-bookmark bookmark"></i>Bookmarks</a>
                 </li>
+                <li>
+                    <form class="navbar-form navbar-right" action="/search">
+                        <input name="q" class="form-control" placeholder="Search Favorites/Bookmarks" id="search">
+                        <button class="btn btn-default">
+                            <span class="fa fa-search"></span>
+                        </button>
+                    </form>
+                </li>
             </ul>
         </div>
         <div class="col-xs-4 col-md-8">

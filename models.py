@@ -253,12 +253,6 @@ class Favorite(db.Model):
         unique=True,
     )
 
-    created_at = db.Column(
-        db.DateTime, 
-        nullable=False, 
-        default=datetime.now
-    )
-    
     @property
     def friendly_time(self):
         """Convert datetime to human readable text"""
@@ -299,13 +293,7 @@ class Bookmark(db.Model):
         db.ForeignKey('activities.id', ondelete='cascade'),
         unique=True,
     )
-    
-    created_at = db.Column(
-        db.DateTime, 
-        nullable=False, 
-        default=datetime.now
-    )
-    
+
     @property
     def friendly_time(self):
         """Convert datetime to human readable text"""

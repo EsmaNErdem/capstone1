@@ -9,6 +9,71 @@
         <a href="/users/{{ user.id }}/favorites/places" class="btn col-sm-4">{{ places | length }} - Places</a>
     </div>
     {% block fav_content %}
+    <h2>Activities:</h2>
+    <ul class="list-group list-group-flush m-2" id="activity-list">
+        {% for activity in activities %}
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-xs-12 col-md">
+                    <a href="/activities/{{ activity['id']}}">
+                        <img src="{{ activity['image_url'] }}" alt="activity image" class="img-fluid">
+                    </a>
+                </div>
+                <div class="col-xs-12 col-md-7">
+                    <h2  class="text-info"><a href="/activities/{{ activity['id']}}">{{ activity["title"] }}</a></h2>
+                    <p>{{ activity["description"] }}</p>
+                    <div class="row justify-content-start"> 
+                        <i class="fa-solid fa-heart {% if activity['id'] in activity_ids_fav %} favorite {% endif %}" id="activity-fav" data-id="{{ activity['id'] }}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['image_url'] }}" data-description='{{ activity["description"] }}'></i>
+                        <i class="fa-solid fa-bookmark {% if activity['id'] in activity_ids_mark %} bookmark {% endif %}" id="activity-mark" data-id="{{ activity['id']}}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['image_url']}}" data-description='{{ activity["description"] }}'></i>                      
+                    </div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    <h2>Events:</h2>
+    <ul class="list-group list-group-flush m-2">
+        {% for event in events %}
+        <li class="list-group-item">
+            <h2>{{ event["title"] }}</h2>        
+            <p>{{ event["description"] }}</p>
+             
+            {% if g.user %}
+            <div class="row justify-content-start">
+                <i class="fa-solid fa-heart {% if event['id'] in event_ids_fav %} favorite {% endif %}" id="event-fav" data-id="{{ event['id']}}" data-title='{{ event["title"] }}' data-description='{{ event["description"] }}'></i>
+                <i class="fa-solid fa-bookmark {% if event['id'] in event_ids_mark %} bookmark {% endif %}" id="event-mark" data-id="{{ event['id']}}" data-title='{{ event["title"] }}'  data-description='{{ event["description"] }}'></i>                  
+            </div>
+            {% endif %}               
+        </li>
+        {% endfor %}
+    </ul>
+    <h2>Places:</h2>
+    <ul class="list-group list-group-flush m-2">
+        {% for place in places %}
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-xs-12 col-md">
+                    <a href="/places/{{ place['id']}}">
+                        <img src='{{ place["image_url"]  }}' alt='place image' class="img-fluid">
+                    </a>
+                </div>
+                <div class="col-xs-12 col-md-7">
+                    <h2 class="text-info"><a href="/places/{{ place['id']}}">{{ place["title"] }}</a></h2>
+                    <p>{{ place["description"] }}</p>
+                    {% if g.user %}
+                    <div class="row justify-content-start">                    
+                        
+                        <i class="fa-solid fa-heart {% if place['id'] in place_ids_fav %} favorite {% endif %}" id="place-fav" data-id="{{ place['id'] }}" data-title='{{ place["title"] }}' data-image-url='{{ place["image_url"]  }}' data-description='{{ place["description"] }}'></i>
+                        <i class="fa-solid fa-bookmark {% if place['id'] in place_ids_mark %} bookmark {% endif %}" id="place-mark" data-id="{{ place['id']}}" data-title='{{ place["title"] }}' data-image-url='{{ place["image_url"]  }}'  data-description='{{ place["daudioDescription"] }}'></i>   
+    
+                    </div>
+                    {% endif %}
+                </div>
+                
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
     {% endblock %}    
 </div>
 

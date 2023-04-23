@@ -1,14 +1,8 @@
-
 {% extends 'users/detail.html' %}
+
 {% block user_details %}
 <div class="container">
-    <h1 class="display-1">Bookmarks</h1>
-    <div class="row">
-        <a href="/users/{{ user.id }}/bookmarks/activities" class="btn col-sm-4">{{ activities | length }} - Activities</a>
-        <a href="/users/{{ user.id }}/bookmarks/events" class="btn col-sm-4">{{ events | length }} - Events</a>
-        <a href="/users/{{ user.id }}/bookmarks/places" class="btn col-sm-4">{{ places | length }} - Places</a>
-    </div>
-    {% block bookmark_content %}
+    <h1 class="display-4">Search Results:</h1>
     <h2>Activities:</h2>
     <ul class="list-group list-group-flush m-2" id="activity-list">
         {% for activity in activities %}
@@ -74,7 +68,5 @@
         </li>
         {% endfor %}
     </ul>
-    {% endblock %}    
 </div>
-
 {% endblock %}

@@ -3,6 +3,7 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import or_
 from flask_sqlalchemy import Pagination
 
 from forms import UserSignUpForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
@@ -285,8 +286,15 @@ def user_favorite(user_id):
     activity_fav = g.user.fav_activities
     event_fav = g.user.fav_events
     place_fav = g.user.fav_places
+
+    activity_ids_mark = [activity.id for activity in g.user.marked_activities]
+    activity_ids_fav = [activity.id for activity in g.user.fav_activities]
+    event_ids_fav = [event.id for event in g.user.fav_events]
+    event_ids_mark = [event.id for event in g.user.marked_events] 
+    place_ids_mark = [place.id for place in g.user.marked_places]
+    place_ids_fav = [place.id for place in g.user.fav_places]
     
-    return render_template('users/favorites/favorites.html', user=user, activities=activity_fav, events=event_fav, places=place_fav)
+    return render_template('users/favorites/favorites.html', user=user, activities=activity_fav, events=event_fav, places=place_fav, activity_ids_mark=activity_ids_mark, activity_ids_fav=activity_ids_fav, place_ids_mark=place_ids_mark, place_ids_fav=place_ids_fav, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
 
 @app.route('/users/<int:user_id>/favorites/activities')
 def user_favorite_activities(user_id):
@@ -365,8 +373,15 @@ def user_bookmark(user_id):
     activity_mark = g.user.marked_activities
     event_mark = g.user.marked_events
     place_mark = g.user.marked_places
+
+    activity_ids_mark = [activity.id for activity in g.user.marked_activities]
+    activity_ids_fav = [activity.id for activity in g.user.fav_activities]
+    event_ids_fav = [event.id for event in g.user.fav_events]
+    event_ids_mark = [event.id for event in g.user.marked_events] 
+    place_ids_mark = [place.id for place in g.user.marked_places]
+    place_ids_fav = [place.id for place in g.user.fav_places]
     
-    return render_template('users/bookmarks/bookmarks.html', user=user, activities=activity_mark, events=event_mark, places=place_mark)
+    return render_template('users/bookmarks/bookmarks.html', user=user, activities=activity_mark, events=event_mark, places=place_mark, activity_ids_mark=activity_ids_mark, activity_ids_fav=activity_ids_fav, place_ids_mark=place_ids_mark, place_ids_fav=place_ids_fav, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
 
 @app.route('/users/<int:user_id>/bookmarks/activities')
 def user_bookmark_activities(user_id):
@@ -404,9 +419,10 @@ def user_bookmark_events(user_id):
     activity_mark = g.user.marked_activities
     event_mark = g.user.marked_events
     place_mark = g.user.marked_places
-    event_ids_mark = [event.id for event in g.user.marked_events]
+    event_ids_fav = [event.id for event in g.user.fav_events]
+    event_ids_mark = [event.id for event in g.user.marked_events] 
 
-    return render_template('users/bookmarks/mark-event.html', user=user, events=event_mark, activities=activity_mark, places=place_mark, event_ids_mark=event_ids_mark)
+    return render_template('users/bookmarks/mark-event.html', user=user, events=event_mark, activities=activity_mark, places=place_mark, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
 
 @app.route('/users/<int:user_id>/bookmarks/places')
 def user_bookmark_places(user_id):
@@ -428,6 +444,27 @@ def user_bookmark_places(user_id):
 
     return render_template('users/bookmarks/mark-place.html', user=user, places=place_mark, events=event_mark, activities=activity_mark, place_ids_mark=place_ids_mark, place_ids_fav=place_ids_fav)
 
+# Search
+@app.route('/search')
+def list_search_results():
+    """Lists content within user's favorites and bookmark 
+    Can take a 'q' param in querystring to search by that content title.
+    """
+
+    search = request.args.get('q')
+    user = g.user 
+    activities = Activity.query.filter(db.or_(Activity.title.ilike(f"%{search}%"), Activity.description.ilike(f"%{search}%"))).all()    
+    events = Event.query.filter(db.or_(Event.title.ilike(f"%{search}%"), Event.description.ilike(f"%{search}%"))).all()    
+    places = Place.query.filter(db.or_(Place.title.ilike(f"%{search}%"), Place.description.ilike(f"%{search}%"))).all() 
+
+    activity_ids_mark = [activity.id for activity in g.user.marked_activities]
+    activity_ids_fav = [activity.id for activity in g.user.fav_activities]
+    event_ids_fav = [event.id for event in g.user.fav_events]
+    event_ids_mark = [event.id for event in g.user.marked_events] 
+    place_ids_mark = [place.id for place in g.user.marked_places]
+    place_ids_fav = [place.id for place in g.user.fav_places]
+    
+    return render_template("users/search.html", user=user, activities=activities, events=events, places=places, activity_ids_mark=activity_ids_mark, activity_ids_fav=activity_ids_fav, place_ids_mark=place_ids_mark, place_ids_fav=place_ids_fav, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
 
 # ----------------ACTIVITIES---------------
          
@@ -628,6 +665,8 @@ def add_fav_act():
         user_id = g.user.id,
         activity_id = activity.id
     )
+    import pdb
+    pdb.set_trace()
     db.session.add(fav_activities)
     db.session.commit()
 
