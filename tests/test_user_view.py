@@ -42,10 +42,10 @@ class UserViewTestCase(TestCase):
         user = User.query.filter_by(username='user1').one()
         self.user = user
 
-        activity1 = Activity(id="activity1", title="title", description="test-desc", image_url="test")
+        activity1 = Activity(id="activity1", title="title", description="activity1", image_url="test")
         activity2 = Activity(id="activity2", title="title", description="test-desc", image_url="test")
         event = Event(id="event1", title="title", description="test-desc")
-        place1 = Place(id="place1", title="title", description="test-desc", image_url="test")
+        place1 = Place(id="place1", title="title", description="place1", image_url="test")
         place2 = Place(id="place2", title="title", description="test-desc", image_url="test")
 
         db.session.add_all([activity1, activity2, event, place1, place2])
@@ -130,12 +130,27 @@ class UserViewTestCase(TestCase):
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.user.id
 
-            resp = c.post(f"/users/delete", follow_redirects=True)
+            resp = c.post("/users/delete", follow_redirects=True)
 
             self.assertEqual(resp.status_code, 200)
         
             html = resp.get_data(as_text=True)
             self.assertIn('<h1 class="display-1">Sign Up</h1>', html)
+
+    def test_user_search(self):
+        """Tests user favorite and bookmark search"""
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.user.id
+                
+            resp = c.get("/search?q=title")
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(self.user.fav_activities[0].title, str(resp.data))
+            self.assertIn(self.user.marked_events[0].title, str(resp.data))
+            self.assertIn('place1', str(resp.data))
+
 
     def test_user_favorites(self):
         """Test view user favorites"""

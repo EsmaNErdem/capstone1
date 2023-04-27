@@ -221,13 +221,12 @@ def profile(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    if g.user.id != user_id:
-        return redirect(f"/users/{g.user.id}")
+    # if g.user.id != user_id:
+    #     return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)
     
     return render_template('users/profile.html', user=user)
-
 
 @app.route('/users/<int:user_id>/edit', methods=["GET", "POST"])
 def edit_profile(user_id):
@@ -466,8 +465,8 @@ def list_search_results():
     
     return render_template("users/search.html", user=user, activities=activities, events=events, places=places, activity_ids_mark=activity_ids_mark, activity_ids_fav=activity_ids_fav, place_ids_mark=place_ids_mark, place_ids_fav=place_ids_fav, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
 
+
 # ----------------ACTIVITIES---------------
-         
 
 @app.route('/activities')
 def show_activities():
@@ -478,7 +477,7 @@ def show_activities():
         activities_data = activities.get_response()
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
-        return render_template('homepage/api-error.html')
+        return render_template('api-error.html')
     
     if not g.user:
         return render_template('activities/list.html', activities=activities_data)
@@ -515,7 +514,7 @@ def show_activity(activity_id):
         activity_data = activities.get_activity(activity_id)
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
-        return render_template('homepage/api-error.html')
+        return render_template('api-error.html')
     
     if not g.user:
         return render_template('activities/show.html', activity=activity_data[0])
@@ -536,7 +535,7 @@ def show_events():
         events_data = events.get_response()
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
-        return render_template('homepage/api-error.html')
+        return render_template('api-error.html')
     
     if not g.user:
         return render_template('events/list.html', events=events_data,)
@@ -557,7 +556,7 @@ def show_places():
         places_data = places.get_response()
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
-        return render_template('homepage/api-error.html')  
+        return render_template('api-error.html')  
     
     if not g.user:
         return render_template('places/list.html', places=places_data)    
@@ -575,7 +574,7 @@ def show_place(place_id):
         place_data = places.get_places(place_id)
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
-        return render_template('homepage/api-error.html')
+        return render_template('api-error.html')
     
     if not g.user:
         return render_template('places/show.html', place=place_data[0])
@@ -597,7 +596,7 @@ def show_homepage_info():
     except Exception as e:
         print(f"API Error****************************: {e}") 
         flash("There was an API error. Pleace try again later", 'danger')
-        return render_template('homepage/api-error.html')
+        return render_template('api-error.html')
     
     return render_template('homepage/info.html', info=info_data[0])
 
@@ -610,7 +609,7 @@ def show_alerts():
         alerts_data = alerts.get_response() 
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
-        return render_template('homepage/api-error.html')
+        return render_template('api-error.html')
     
     return render_template('homepage/alerts.html', alerts=alerts_data, info=info_data[0])
 
@@ -623,7 +622,7 @@ def show_centers():
         info_data = info.get_response()
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
-        return render_template('homepage/api-error.html')
+        return render_template('api-error.html')
     
     return render_template('homepage/visitor-center.html', centers=centers_data, info=info_data[0])
 
@@ -719,7 +718,6 @@ def remove_mark_act(activity_id):
     
     return jsonify(message="Deleted")
     
-
 # Event
 @app.route("/api/event/favorite", methods=["POST"])
 def add_fav_event():

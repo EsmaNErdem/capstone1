@@ -55,16 +55,6 @@
                     <a href="/logout">Log out</a>
                 </li>
                 {% endif %}
-                <!-- {% if request.endpoint != None %}
-                <li>
-                    <form >
-                    <input name="q" placeholder="Search" id="search" class="search-box">
-                    <button>
-                        <span class="fa fa-search"></span>
-                    </button>
-                    </form>
-                </li>
-                {% endif %} -->
             </ul>
         </nav>
     </header>
@@ -72,9 +62,21 @@
         {% for category, message in get_flashed_messages(with_categories=True) %}
         <div class="alert alert-{{ category }}">{{ message }}</div>
         {% endfor %}
+        
+        <div class="preload hidden">
+            <!-- treeline img url: https://www.futurity.org/wp/wp-content/uploads/2019/05/tree-line-on-white_1600.jpg -->
+            <div class="tree-line"></div>
+            <!-- cloud img url:https: //static.vecteezy.com/system/resources/previews/012/595/156/original/realistic-white-cloud-free-png.png -->
+            <img src="/static/images/cloud.webp" alt="" class="cloud1">
+            <img src="/static/images/cloud.webp" alt="" class="cloud2">
+            <img src="/static/images/cloud.webp" alt="" class="cloud3">
+            <img src="/static/images/cloud.webp" alt="" class="cloud4">
+        </div>
 
-        {% block content %}
-        {% endblock %}
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
     </section>    
     
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

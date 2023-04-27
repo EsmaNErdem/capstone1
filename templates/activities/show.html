@@ -23,19 +23,19 @@
             <div class="col-6">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <p>Seasonal Description: <span>{{ activity["seasonDescription"] }}</span></p>
+                        <p>Seasonal Description: <span>{{ activity["seasonDescription"] | safe }}</span></p>
                     </li>
                     <li class="list-group-item">
-                        <p>Accessibility: <span>{{ activity["accessibilityInformation"] }}</span></p>
+                        <p>Accessibility: <span>{{ activity["accessibilityInformation"] | safe }}</span></p>
                     </li>
                     <li class="list-group-item">
-                        <p>Age Groups: <span>{{ activity["ageDescription"] }}</span></p>
+                        <p>Age Groups: <span>{{ activity["ageDescription"] | safe }}</span></p>
                     </li>
                     <li class="list-group-item">
-                        <p>Pet Info: <span>{{ activity["petsDescription"] }}</span></p>
+                        <p>Pet Info: <span>{{ activity["petsDescription"] | safe }}</span></p>
                     </li>
                     <li class="list-group-item">
-                        <p>Duration: <span>{{ activity["durationDescription"] }}</span></p>
+                        <p>Duration: <span>{{ activity["durationDescription"] | safe }}</span></p>
                     </li>              
                 </ul>
             </div>
@@ -44,8 +44,8 @@
             </div>
         </div>
         <div class="row mt-4">
-            <p class="mt-2">{{ activity["activityDescription"] }}</p>
-            <div>{{ activity["longDescription"] }}</div>
+            <p class="mt-2">{{ activity["activityDescription"] | safe }}</p>
+            <div>{{ activity["longDescription"] | safe }}</div>
         </div>
     
     </div>

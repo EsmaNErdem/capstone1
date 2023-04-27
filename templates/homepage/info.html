@@ -10,8 +10,8 @@
 
 <div class="container">
     <h1  class="display-1">Acadia National Park</h1>
-    <h3>{{ info["description"] }}</h3>
-    <p>{{ info["weatherInfo"] }}</p>
+    <h3>{{ info["description"] | safe }}</h3>
+    <p>{{ info["weatherInfo"] | safe }}</p>
 </div>
                     
 {% endblock %}

@@ -9,7 +9,7 @@
         <li class="list-group-item">
             <h2>{{ event["title"] }}</h2>        
             <h3>By {{ event["contactname"] }}</h3>
-            <p>{{ event["description"] }}</p>
+            <p>{{ event["description"] | safe }}</p>
             <p>{{ event["regresinfo"] }}</p>  
             <p>
                 {% for hastag in event["types"] %}
