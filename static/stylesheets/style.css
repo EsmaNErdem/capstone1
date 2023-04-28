@@ -6,6 +6,21 @@
     gap: var(--gap, 2rem);
 }
 
+.hidden {
+    display: none;
+}
+
+body{
+    margin: 0;
+    /* background-image:url(/static/images/background-1.jpg) ;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed; */
+    background-color: #e6ecf0;
+    /*so the navigation mobile slide doesn't overlap  */
+    overflow-x: hidden;
+}
+
 /* NAVBAR */
 .logo {
     width: 80px;
@@ -175,9 +190,7 @@ to {
     right: 130%;
 }}
 
-.hidden {
-    display: none;
-}
+
 
 /* HOMEPAGE */
 
@@ -214,16 +227,7 @@ to {
 .bookmark {
     color: gold;
 }
-body{
-    margin: 0;
-    /* background-image:url(/static/images/background-1.jpg) ;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed; */
-    background-color: #e6ecf0;
-    /*so the navigation mobile slide doesn't overlap  */
-    overflow-x: hidden;
-}
+
 
 
 /* PROFIL */

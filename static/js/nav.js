@@ -13,3 +13,47 @@ navToggle.addEventListener('click', function(evt){
         navToggle.setAttribute("area-expanded", false);
     }
 });
+
+
+// LOADER
+// navbar-homepage buttons
+const navHomepage = document.querySelector("#homepage-nav")
+const navActivities = document.querySelector("#activities-nav")
+const navEvents = document.querySelector("#events-nav")
+const navPlaces = document.querySelector("#places-nav")
+const navInfo = document.querySelector("#info-nav")
+const navCenter = document.querySelector("#center-nav")
+const navAlert = document.querySelector("#alert-nav")
+const activityLink = document.querySelector("#activity-link")
+const placeLink = document.querySelector("#place-link")
+
+const loader = document.querySelector("#loader")
+const page = document.querySelector("#main-content")
+
+function showLoader() {
+    page.classList.add("hidden")
+    loader.classList.remove("hidden")
+}
+
+const timeout = setTimeout(showLoader, 750);
+
+window.addEventListener("load", function () {
+    clearTimeout(timeout);
+    page.classList.remove("hidden");
+    loader.classList.add("hidden");
+});
+
+window.onbeforeunload = function() {
+    const timeout = setTimeout(showLoader, 750);
+};
+
+navHomepage.addEventListener("click", showLoader)
+navActivities.addEventListener("click", showLoader)
+navEvents.addEventListener("click", showLoader)
+navPlaces.addEventListener("click", showLoader)
+navInfo.addEventListener("click", showLoader)
+navCenter.addEventListener("click", showLoader)
+navAlert.addEventListener("click", showLoader)
+
+activityLink.forEach(link => link.addEventListener("click", showLoader))
+placeLink.forEach(link => link.addEventListener("click", showLoader))

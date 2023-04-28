@@ -17,7 +17,7 @@
 <body>
     <header class="primary-header flex">
         <div>
-            <a href="/">
+            <a href="/" id="homepage-nav">
                 <img src="/static/images/logo.jpg" alt="Logo" class="logo">
              </a>
         </div>
@@ -29,13 +29,13 @@
         <nav>
             <ul id="primary-navigation" data-visible ="false" class="primary-navigation flex">
                 <li>
-                    <a href="/activities">Activities</a>
+                    <a href="/activities" id="activities-nav">Activities</a>
                 </li>
                 <li>
-                    <a href="/events">Events</a>
+                    <a href="/events" id="events-nav">Events</a>
                 </li>
                 <li>
-                    <a href="/places">Places</a>
+                    <a href="/places" id="places-nav">Places</a>
                 </li>
                 
                 {% if not g.user %}
@@ -63,7 +63,7 @@
         <div class="alert alert-{{ category }}">{{ message }}</div>
         {% endfor %}
         
-        <div class="preload hidden">
+        <div class="preload hidden" id="loader">
             <!-- treeline img url: https://www.futurity.org/wp/wp-content/uploads/2019/05/tree-line-on-white_1600.jpg -->
             <div class="tree-line"></div>
             <!-- cloud img url:https: //static.vecteezy.com/system/resources/previews/012/595/156/original/realistic-white-cloud-free-png.png -->
@@ -71,9 +71,10 @@
             <img src="/static/images/cloud.webp" alt="" class="cloud2">
             <img src="/static/images/cloud.webp" alt="" class="cloud3">
             <img src="/static/images/cloud.webp" alt="" class="cloud4">
+            <h1> PAGE LOADING...</h1>
         </div>
 
-        <div class="content">
+        <div class="content" id="main-content">
             {% block content %}
             {% endblock %}
         </div>
