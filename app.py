@@ -4,7 +4,8 @@ from flask import Flask, render_template, request, flash, redirect, session, g, 
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import or_
-from flask_sqlalchemy import Pagination
+from flask_paginate import Pagination, get_page_args
+
 
 from forms import UserSignUpForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
 from models import db, connect_db, User, Activity, Event, Place, Favorite, Bookmark
@@ -278,13 +279,10 @@ def user_favorite(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    if g.user.id != user_id:
-        return redirect(f"/users/{g.user.id}")
-
     user = User.query.get_or_404(user_id)
-    activity_fav = g.user.fav_activities
-    event_fav = g.user.fav_events
-    place_fav = g.user.fav_places
+    activity_fav = user.fav_activities
+    event_fav = user.fav_events
+    place_fav = user.fav_places
 
     activity_ids_mark = [activity.id for activity in g.user.marked_activities]
     activity_ids_fav = [activity.id for activity in g.user.fav_activities]
@@ -302,18 +300,23 @@ def user_favorite_activities(user_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-
-    if g.user.id != user_id:
-        return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
-    activity_fav = g.user.fav_activities
-    event_fav = g.user.fav_events
-    place_fav = g.user.fav_places
+    activity_fav = user.fav_activities
+    event_fav = user.fav_events
+    place_fav = user.fav_places
+
+    page = int(request.args.get('page', 1))
+    per_page = 5 
+    offset = (page - 1) * per_page 
+    paginated_activity_fav = activity_fav[offset:offset+per_page] 
+    total = len(activity_fav) 
+    pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
+    
     activity_ids_fav = [activity.id for activity in g.user.fav_activities]
     activity_ids_mark = [activity.id for activity in g.user.marked_activities]
 
-    return render_template('users/favorites/fav-activity.html', user=user, activities=activity_fav, events=event_fav, places=place_fav, activity_ids_fav=activity_ids_fav, activity_ids_mark=activity_ids_mark)
+    return render_template('users/favorites/fav-activity.html', user=user, activities=paginated_activity_fav, events=event_fav, places=place_fav, activity_ids_fav=activity_ids_fav, activity_ids_mark=activity_ids_mark, pagination=pagination)
 
 @app.route('/users/<int:user_id>/favorites/events')
 def user_favorite_events(user_id):
@@ -322,18 +325,23 @@ def user_favorite_events(user_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-
-    if g.user.id != user_id:
-        return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
-    activity_fav = g.user.fav_activities
-    event_fav = g.user.fav_events
-    place_fav = g.user.fav_places
+    activity_fav = user.fav_activities
+    event_fav = user.fav_events
+    place_fav = user.fav_places
+
+    page = int(request.args.get('page', 1))
+    per_page = 5 
+    offset = (page - 1) * per_page 
+    paginated_event_fav = event_fav[offset:offset+per_page] 
+    total = len(event_fav) 
+    pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
+    
     event_ids_fav = [event.id for event in g.user.fav_events]
     event_ids_mark = [event.id for event in g.user.marked_events]    
 
-    return render_template('users/favorites/fav-event.html', user=user, events=event_fav, activities=activity_fav, places=place_fav, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
+    return render_template('users/favorites/fav-event.html', user=user, events=paginated_event_fav, activities=activity_fav, places=place_fav, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark, pagination=pagination)
 
 @app.route('/users/<int:user_id>/favorites/places')
 def user_favorite_places(user_id):
@@ -342,18 +350,23 @@ def user_favorite_places(user_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-
-    if g.user.id != user_id:
-        return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
-    place_fav = g.user.fav_places    
-    activity_fav = g.user.fav_activities
-    event_fav = g.user.fav_events
+    place_fav = user.fav_places    
+    activity_fav = user.fav_activities
+    event_fav = user.fav_events
+
+    page = int(request.args.get('page', 1))
+    per_page = 5 
+    offset = (page - 1) * per_page 
+    paginated_place_fav = place_fav[offset:offset+per_page] 
+    total = len(place_fav) 
+    pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
+    
     place_ids_fav = [place.id for place in g.user.fav_places]
     place_ids_mark = [place.id for place in g.user.marked_places]
 
-    return render_template('users/favorites/fav-place.html', user=user, places=place_fav, events=event_fav, activities=activity_fav, place_ids_fav=place_ids_fav, place_ids_mark=place_ids_mark)
+    return render_template('users/favorites/fav-place.html', user=user, places=paginated_place_fav, events=event_fav, activities=activity_fav, place_ids_fav=place_ids_fav, place_ids_mark=place_ids_mark, pagination=pagination)
 
 # User-Bookmarks
 
@@ -365,13 +378,13 @@ def user_bookmark(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    if g.user.id != user_id:
-        return redirect(f"/users/{g.user.id}")
+    # if g.user.id != user_id:
+    #     return redirect(f"/users/{g.user.id}")
 
     user = User.query.get_or_404(user_id)
-    activity_mark = g.user.marked_activities
-    event_mark = g.user.marked_events
-    place_mark = g.user.marked_places
+    activity_mark = user.marked_activities
+    event_mark = user.marked_events
+    place_mark = user.marked_places
 
     activity_ids_mark = [activity.id for activity in g.user.marked_activities]
     activity_ids_fav = [activity.id for activity in g.user.fav_activities]
@@ -389,19 +402,24 @@ def user_bookmark_activities(user_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-
-    if g.user.id != user_id:
-        return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
-    activity_mark = g.user.marked_activities
-    event_mark = g.user.marked_events
-    place_mark = g.user.marked_places
+    activity_mark = user.marked_activities
+    event_mark = user.marked_events
+    place_mark = user.marked_places
+
+    page = int(request.args.get('page', 1))
+    per_page = 5 
+    offset = (page - 1) * per_page 
+    paginated_activity_mark = activity_mark[offset:offset+per_page] 
+    total = len(activity_mark) 
+    pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
+    
     activity_ids_mark = [activity.id for activity in g.user.marked_activities]
     activity_ids_fav = [activity.id for activity in g.user.fav_activities]
 
 
-    return render_template('users/bookmarks/mark-activity.html', user=user, activities=activity_mark, events=event_mark, places=place_mark, activity_ids_mark=activity_ids_mark, activity_ids_fav=activity_ids_fav)
+    return render_template('users/bookmarks/mark-activity.html', user=user, activities=paginated_activity_mark, events=event_mark, places=place_mark, activity_ids_mark=activity_ids_mark, activity_ids_fav=activity_ids_fav, pagination=pagination)
 
 @app.route('/users/<int:user_id>/bookmarks/events')
 def user_bookmark_events(user_id):
@@ -410,18 +428,23 @@ def user_bookmark_events(user_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-
-    if g.user.id != user_id:
-        return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
-    activity_mark = g.user.marked_activities
-    event_mark = g.user.marked_events
-    place_mark = g.user.marked_places
+    activity_mark = user.marked_activities
+    event_mark = user.marked_events
+    place_mark = user.marked_places
+
+    page = int(request.args.get('page', 1))
+    per_page = 5 
+    offset = (page - 1) * per_page 
+    paginated_event_mark = event_mark[offset:offset+per_page] 
+    total = len(event_mark) 
+    pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
+
     event_ids_fav = [event.id for event in g.user.fav_events]
     event_ids_mark = [event.id for event in g.user.marked_events] 
 
-    return render_template('users/bookmarks/mark-event.html', user=user, events=event_mark, activities=activity_mark, places=place_mark, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
+    return render_template('users/bookmarks/mark-event.html', user=user, events=paginated_event_mark, activities=activity_mark, places=place_mark, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark, pagination=pagination)
 
 @app.route('/users/<int:user_id>/bookmarks/places')
 def user_bookmark_places(user_id):
@@ -430,18 +453,23 @@ def user_bookmark_places(user_id):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
-
-    if g.user.id != user_id:
-        return redirect(f"/users/{g.user.id}")
     
     user = User.query.get_or_404(user_id)    
-    place_mark = g.user.marked_places    
-    activity_mark = g.user.marked_activities
-    event_mark = g.user.marked_events
+    place_mark = user.marked_places    
+    activity_mark = user.marked_activities
+    event_mark = user.marked_events
+    
+    page = int(request.args.get('page', 1))
+    per_page = 5 
+    offset = (page - 1) * per_page 
+    paginated_place_mark = place_mark[offset:offset+per_page] 
+    total = len(place_mark) 
+    pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
+
     place_ids_mark = [place.id for place in g.user.marked_places]
     place_ids_fav = [place.id for place in g.user.fav_places]
 
-    return render_template('users/bookmarks/mark-place.html', user=user, places=place_mark, events=event_mark, activities=activity_mark, place_ids_mark=place_ids_mark, place_ids_fav=place_ids_fav)
+    return render_template('users/bookmarks/mark-place.html', user=user, places=paginated_place_mark, events=event_mark, activities=activity_mark, place_ids_mark=place_ids_mark, place_ids_fav=place_ids_fav, pagination=pagination)
 
 # Search
 @app.route('/search')
@@ -467,6 +495,8 @@ def list_search_results():
 
 
 # ----------------ACTIVITIES---------------
+    # import pdb
+    # pdb.set_trace()
 
 @app.route('/activities')
 def show_activities():
@@ -481,30 +511,18 @@ def show_activities():
     
     if not g.user:
         return render_template('activities/list.html', activities=activities_data)
+  
+    page = int(request.args.get('page', 1))
+    per_page = 15 
+    offset = (page - 1) * per_page 
+    paginated_activities = activities_data[offset:offset+per_page] 
+    total = len(activities_data) 
+    pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
     
-
-    # page = int(request.args.get('page', 1))
-    # per_page = 20 
-    # offset = (page - 1) * per_page 
-    # items_pagination = activities_data[offset:offset+per_page] 
-    # total = len(activities_data) 
-    # pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
-    # , pagination=pagination
-
-
-
-#     File "/home/esma/springboard/capstone1/app.py", line 424, in show_activities
-#     pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total)
-#   File "/home/esma/springboard/capstone1/venv/lib/python3.10/site-packages/flask_sqlalchemy/pagination.py", line 69, in __init__
-#     items = self._query_items()
-#   File "/home/esma/springboard/capstone1/venv/lib/python3.10/site-packages/flask_sqlalchemy/pagination.py", line 156, in _query_items
-#     raise NotImplementedError
-# NotImplementedError
-
     activity_ids_fav = [activity.id for activity in g.user.fav_activities]
     activity_ids_mark = [activity.id for activity in g.user.marked_activities]
 
-    return render_template('activities/list.html', activities=activities_data, activity_ids_fav=activity_ids_fav, activity_ids_mark=activity_ids_mark)
+    return render_template('activities/list.html', activities=paginated_activities, activity_ids_fav=activity_ids_fav, activity_ids_mark=activity_ids_mark, pagination=pagination)
 
 @app.route('/activities/<activity_id>')
 def show_activity(activity_id):
@@ -540,10 +558,17 @@ def show_events():
     if not g.user:
         return render_template('events/list.html', events=events_data,)
     
+    page = int(request.args.get('page', 1))
+    per_page = 15 
+    offset = (page - 1) * per_page 
+    paginated_events = events_data[offset:offset+per_page] 
+    total = len(events_data) 
+    pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
+    
     event_ids_fav = [event.id for event in g.user.fav_events]
     event_ids_mark = [event.id for event in g.user.marked_events]
 
-    return render_template('events/list.html', events=events_data, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
+    return render_template('events/list.html', events=paginated_events, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark, pagination=pagination)
 
 
 # ---------------PLACES-----------------
@@ -559,12 +584,19 @@ def show_places():
         return render_template('api-error.html')  
     
     if not g.user:
-        return render_template('places/list.html', places=places_data)    
+        return render_template('places/list.html', places=places_data)  
+
+    page = int(request.args.get('page', 1))
+    per_page = 15 
+    offset = (page - 1) * per_page 
+    paginated_places = places_data[offset:offset+per_page] 
+    total = len(places_data) 
+    pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
       
     place_ids_fav = [place.id for place in g.user.fav_places]
     place_ids_mark = [place.id for place in g.user.marked_places]
    
-    return render_template('places/list.html', places=places_data, place_ids_fav=place_ids_fav, place_ids_mark=place_ids_mark)
+    return render_template('places/list.html', places=paginated_places, place_ids_fav=place_ids_fav, place_ids_mark=place_ids_mark, pagination=pagination)
 
 @app.route('/places/<place_id>')
 def show_place(place_id):
@@ -664,8 +696,6 @@ def add_fav_act():
         user_id = g.user.id,
         activity_id = activity.id
     )
-    import pdb
-    pdb.set_trace()
     db.session.add(fav_activities)
     db.session.commit()
 

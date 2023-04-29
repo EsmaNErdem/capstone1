@@ -3,11 +3,21 @@
 {% block user_details %}
 <div class="container">
     <h1 class="display-1">Favorites</h1>
-    <div class="row">
+    {% if g.user.id == user.id %}
+     <div class="row">
         <a href="/users/{{ user.id }}/favorites/activities" class="btn col-sm-4">{{ activities | length }} - Activities</a>
         <a href="/users/{{ user.id }}/favorites/events" class="btn col-sm-4">{{ events | length }} - Events</a>
         <a href="/users/{{ user.id }}/favorites/places" class="btn col-sm-4">{{ places | length }} - Places</a>
-    </div>
+    </div>     
+    {% endif %}
+    {% if g.user.id != user.id %}
+     <div class="row">
+        <a href="/users/{{ user.id }}/favorites/activities" class="btn col-sm-4">Activities</a>
+        <a href="/users/{{ user.id }}/favorites/events" class="btn col-sm-4">Events</a>
+        <a href="/users/{{ user.id }}/favorites/places" class="btn col-sm-4">Places</a>
+    </div>     
+    {% endif %}
+    
     {% block fav_content %}
     <h2>Activities:</h2>
     <ul class="list-group list-group-flush m-2" id="activity-list">

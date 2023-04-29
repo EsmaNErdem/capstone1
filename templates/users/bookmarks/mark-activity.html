@@ -1,7 +1,7 @@
 {% extends 'users/bookmarks/bookmarks.html' %}
 
 {% block bookmark_content %}
-
+{{ pagination.info }}
 <ul class="list-group list-group-flush m-2" id="activity-list">
     {% for activity in activities %}
     <li class="list-group-item">
@@ -23,5 +23,6 @@
     </li>
     {% endfor %}
 </ul>
+{{ pagination.links }}
 
 {% endblock %}

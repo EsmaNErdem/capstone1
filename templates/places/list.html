@@ -4,6 +4,7 @@
 {% block content %}
 <div class="container">
     <h1 class="display-1">Places</h1>
+    {{ pagination.info }}
     <ul class="list-group list-group-flush m-2">
         {% for place in places %}
         <li class="list-group-item">
@@ -22,19 +23,15 @@
                     <p>{{ place["audioDescription"] }}</p>
                     {% if g.user %}
                     <div class="row justify-content-start">
-                        
-                        
                         <i class="fa-solid fa-heart {% if place['id'] in place_ids_fav %} favorite {% endif %}" id="place-fav" data-id="{{ place['id'] }}" data-title='{{ place["title"] }}' data-image-url="{% if place['images'][0]['crops'] %} {{  place['images'][0]['crops'][0]['url'] }} {% else %} {{ place['images'][0]['url'] }} {% endif %}" data-description='{{ place["audioDescription"] }}'></i>
-                        <i class="fa-solid fa-bookmark {% if place['id'] in place_ids_mark %} bookmark {% endif %}" id="place-mark" data-id="{{ place['id']}}" data-title='{{ place["title"] }}' data-image-url="{% if place['images'][0]['crops'] %} {{  place['images'][0]['crops'][0]['url'] }} {% else %} {{ place['images'][0]['url'] }} {% endif %}"  data-description='{{ place["audioDescription"] }}'></i>                      
-                        {% else %}
-
+                        <i class="fa-solid fa-bookmark {% if place['id'] in place_ids_mark %} bookmark {% endif %}" id="place-mark" data-id="{{ place['id']}}" data-title='{{ place["title"] }}' data-image-url="{% if place['images'][0]['crops'] %} {{  place['images'][0]['crops'][0]['url'] }} {% else %} {{ place['images'][0]['url'] }} {% endif %}"  data-description='{{ place["audioDescription"] }}'></i>
                     </div>
                     {% endif %}
                 </div>
-                
             </div>
         </li>
         {% endfor %}
     </ul>
+    {{ pagination.links }}
 </div>
 {% endblock %}

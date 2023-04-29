@@ -4,6 +4,7 @@
 {% block content %}
 <div class="container">
     <h1 class="display-1">Events</h1>
+    {{ pagination.info }}
     <ul class="list-group list-group-flush m-2">
         {% for event in events %}
         <li class="list-group-item">
@@ -25,6 +26,7 @@
         </li>
         {% endfor %}
     </ul>
+    {{ pagination.links }}
 </div>
 
 {% endblock %}

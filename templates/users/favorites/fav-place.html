@@ -2,6 +2,7 @@
 
 {% block fav_content %}
 
+{{ pagination.info }}
 <ul class="list-group list-group-flush m-2">
     {% for place in places %}
     <li class="list-group-item">
@@ -28,5 +29,6 @@
     </li>
     {% endfor %}
 </ul>
+{{ pagination.links }}
 
 {% endblock %}

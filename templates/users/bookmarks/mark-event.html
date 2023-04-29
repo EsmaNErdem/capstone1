@@ -2,11 +2,12 @@
 
 {% block bookmark_content %}
 
+{{ pagination.info }}
 <ul class="list-group list-group-flush m-2">
     {% for event in events %}
     <li class="list-group-item">
         <h2>{{ event["title"] }}</h2>        
-        <p>{{ event["description"] }}</p>
+        <p>{{ event["description"] | safe  }}</p>
          
         {% if g.user %}
         <div class="row justify-content-start">
@@ -17,5 +18,6 @@
     </li>
     {% endfor %}
 </ul>
+{{ pagination.links }}
 
 {% endblock %}
