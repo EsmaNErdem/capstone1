@@ -1,14 +1,20 @@
 {% extends 'homepage/homepage.html'  %}
 
-{% block background_img %}
-<div class="picturefill-background">
-    <img src="{{ info['images'][0]['url'] }}" alt="homepage background image" >
-</div>
-{% endblock %}
+{% block background_img %}info-background{% endblock %}
+
 
 {% block homepage_content %}
+       
 
-<div class="container">
+<div class="home" id="home">
+    <div class="home-text">
+        <h1 class="display-3">Take a hike, pal</h1>
+        <p>Plan your visit to Acadia National Park with Wicked Acadia. Explore activities, events and places.</p>
+        <a href="#info-data" class="home-btn">Read more...</a>
+    </div>
+</div>
+
+<div class="container" id="info-data" class="info-data">
     <h1  class="display-1">Acadia National Park</h1>
     <h3>{{ info["description"] | safe }}</h3>
     <p>{{ info["weatherInfo"] | safe }}</p>

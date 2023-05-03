@@ -9,8 +9,6 @@ from api import Alerts, Centers, Info, Activities, Events, Places
 
 os.environ['DATABASE_URL'] = "postgresql:///wicked_test"
 
-api_key = os.getenv('API_KEY')
-
 from app import app, CURR_USER_KEY
 
 db.create_all()
@@ -23,6 +21,7 @@ class ApiCallTestCase(TestCase):
 
         os.environ['DATABASE_URL'] = "postgresql:///wicked-test"
         app.config['SQLALCHEMY_ECHO'] = False
+        # os.environ['API_KEY'] = os.getenv('API_KEY')
         app.config['TESTING'] = True
         self.client = app.test_client()
 
@@ -57,23 +56,22 @@ class ApiCallTestCase(TestCase):
         with self.client as c:
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.user.id
+                os.getenv('API_KEY')
 
-            resp = c.get("/activities")
-            info = Info()
-            infor = info.get_response()
-
-# (Pdb) infor
-# {'error': {'code': 'API_KEY_MISSING', 'message': 'An API key was not provided. Please get one at https://www.nps.gov/subjects/developer/get-started.htm'}}
-
+            # resp = c.get("/activities")
+            activities = Activities()
 
             import pdb
             pdb.set_trace()
+            act = activities.get_response()
+
+            
+# (Pdb) infor
 
 
-            self.assertEqual(resp.status_code, 200)
-            self.assertIn("Info", str(resp.data))
-            self.assertIn('<a  href="/signup">Sign up</a>', str(resp.data))
-            self.assertIn("Log In", str(resp.data))
-            self.assertIn("Visitor Center", str(resp.data))
+# API KEY IS MISSING WHEN THE API CALLS ARE IN TERMINAL OR TESTING ANYWHERE OUTSIDE OF FLASK RUN, SO FAR!!! WHY???? OS.ENV CANNOT GET THE API_KEY? HOW TO FIX IT?
+# {'error': {'code': 'API_KEY_MISSING', 'message': 'An API key was not provided. Please get one at https://www.nps.gov/subjects/developer/get-started.htm'}}
 
-    
+
+
+           

@@ -505,12 +505,9 @@ def show_activities():
     
     try: 
         activities_data = activities.get_response()
-    except: 
-        flash("There was an API error. Pleace try again later", 'danger')
+    except Exception as err: 
+        flash(f"There was an API error. Pleace try again later, {err}", 'danger')
         return render_template('api-error.html')
-    
-    if not g.user:
-        return render_template('activities/list.html', activities=activities_data)
   
     page = int(request.args.get('page', 1))
     per_page = 15 
@@ -518,6 +515,9 @@ def show_activities():
     paginated_activities = activities_data[offset:offset+per_page] 
     total = len(activities_data) 
     pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
+    
+    if not g.user:
+        return render_template('activities/list.html', activities=activities_data, pagination = pagination)
     
     activity_ids_fav = [activity.id for activity in g.user.fav_activities]
     activity_ids_mark = [activity.id for activity in g.user.marked_activities]
@@ -555,9 +555,6 @@ def show_events():
         flash("There was an API error. Pleace try again later", 'danger')
         return render_template('api-error.html')
     
-    if not g.user:
-        return render_template('events/list.html', events=events_data,)
-    
     page = int(request.args.get('page', 1))
     per_page = 15 
     offset = (page - 1) * per_page 
@@ -565,8 +562,12 @@ def show_events():
     total = len(events_data) 
     pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
     
+    if not g.user:
+        return render_template('events/list.html', events=paginated_events, pagination=pagination)
+    
     event_ids_fav = [event.id for event in g.user.fav_events]
     event_ids_mark = [event.id for event in g.user.marked_events]
+    
 
     return render_template('events/list.html', events=paginated_events, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark, pagination=pagination)
 
@@ -582,9 +583,6 @@ def show_places():
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
         return render_template('api-error.html')  
-    
-    if not g.user:
-        return render_template('places/list.html', places=places_data)  
 
     page = int(request.args.get('page', 1))
     per_page = 15 
@@ -592,6 +590,9 @@ def show_places():
     paginated_places = places_data[offset:offset+per_page] 
     total = len(places_data) 
     pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
+    
+    if not g.user:
+        return render_template('places/list.html', places=paginated_places, pagination=pagination)  
       
     place_ids_fav = [place.id for place in g.user.fav_places]
     place_ids_mark = [place.id for place in g.user.marked_places]

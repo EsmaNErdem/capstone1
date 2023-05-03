@@ -37,7 +37,7 @@ Overall, this database schema is designed to store and manage data related to us
 
 
 ### Website Flow
-The homepage of Wicked Acadia provides users with a brief overview of ANP and displays the latest alerts and visitor center information with directions. Users have the option to sign-up or log in using WTForms. The "remember me?" feature keeps users signed in for 30 days or until their cookies are cleared. The "Forgot Password?" feature sends a recovery token to the user's email for password recovery if the password is forgotten. Once logged in, users can save data into their profile. 
+The homepage of Wicked Acadia provides users with a brief overview of ANP and displays the latest alerts and visitor center information with directions. Users have the option to sign-up or log in using WTForms. The "remember me?" feature keeps users signed in for 30 days or until their cookies are cleared. The "Forgot Password?" feature sends a recovery token to the user's email for password recovery if the password is forgotten. Once logged in, users can save data into their profile to view later. Data that was retrieved from API will be saved in database as users add data to their favorite/bookmark list.
 
 Wicked Acadia has three main categories: Activities, Events, and Places, and all information about ANP is obtained from the National Park API. API calls are made in the backend using ORM-Python. Users can add data to their favorites and bookmarks list by clicking on the heart and bookmark icons, respectively, without refreshing the page. This functionality is achieved using Vanilla Javascript and Flask-RestfulAPI to send data to the backend.
 

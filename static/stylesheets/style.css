@@ -1,24 +1,40 @@
+:root {
+    --primary-color:#09155f
+}
+
 * {
     box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Sigmar', cursive;
 }
+
+body{
+    margin: 0;
+    overflow-x: hidden;
+    color: var(--primary-color);
+}
+
 .flex {
     display: flex;
-    gap: var(--gap, 2rem);
+    gap: var(--gap, 3rem);
 }
 
 .hidden {
     display: none;
 }
 
-body{
+.content {
+    padding: 0;
     margin: 0;
-    /* background-image:url(/static/images/background-1.jpg) ;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed; */
-    background-color: #e6ecf0;
-    /*so the navigation mobile slide doesn't overlap  */
-    overflow-x: hidden;
+}
+
+ul {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
 }
 
 /* NAVBAR */
@@ -30,7 +46,7 @@ body{
 
 .primary-header {
     height: 6rem;
-    padding: 0;
+    padding: 0 20px;
     margin:0;
     align-items: center;
     justify-content: space-between;
@@ -49,16 +65,16 @@ body{
 
 .primary-navigation a {
     text-transform: uppercase;
-    text-decoration: none;
+    text-decoration: none;    
+    font-size: 20px;
     letter-spacing: 2px;
-    font-weight: 900;
     color: white;
 }
 
 .primary-navigation a:hover {
-    text-decoration: underline;
+    border-bottom: 2px #fff solid;
+    letter-spacing: 0.15rem;
     transition: padding-bottom 0.2s ease-in-out;
-    padding-bottom: 1em;
 }
 
 .nav-profile-img {
@@ -81,9 +97,10 @@ body{
         inset: 0 0 0 30%;
         flex-direction: column;
         padding: min(30vh, 10rem) 2rem;
-        background: hsla(0, 0%, 0%, 0.6);
+        background: hsla(0, 0%, 0%, 0.45);
         transform: translateX(100%);
         transition: transform 450ms ease-in-out;
+        z-index: 9998;
     }
 
     .primary-navigation[data-visible="true"] {
@@ -105,8 +122,10 @@ body{
     }
 
     .mobile-nav-toggle[area-expanded="true"] {
-        background-image: url("/static/images/icon-close.avif");
-
+        background-image: url("/static/images/download.jpg");
+        background-size: cover;
+        border-radius: 50%;
+        z-index: 9999;
     }
 }
 
@@ -115,8 +134,8 @@ body{
         padding-right: 2rem;
     }
 
-    .primary-header {        
-        background: hsla(0, 0%, 0%, 0.6);
+    .primary-header {
+        background: hsla(0, 0%, 0%, 0.45);
     }
 
     /* incase backdrop-filter is not supported */
@@ -139,15 +158,15 @@ body{
     overflow: hidden;  
 }
 
-  .tree-line {
-    position: absolute;
-    height: 350px;
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-image: url('/static/images/tree-line.jpg');
-  }
+.tree-line {
+position: absolute;
+height: 350px;
+width: 100%;
+bottom: 0;
+left: 0;
+right: 0;
+background-image: url('/static/images/tree-line.jpg');
+}
 
 .cloud1,
 .cloud2,
@@ -191,29 +210,65 @@ to {
 }}
 
 
-
 /* HOMEPAGE */
+.homepage-links {
+    padding: 1rem;
+    position: absolute;
+    top: 40%;
+    flex-direction: column;
+    left: 0;
+    color:#fff;
+    z-index: 2;
+}
 
-/* .picturefill-background {
-    background-color: gray;
-    background-position: center center;
-    background-size: cover;
+.home {
     position: relative;
+    color:#fff;
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    padding: 13rem 5%;
+}
+
+.home-text{
+    line-height: 1.2;
+    text-align: right
+}
+
+.home-text p{
+padding-top: 1.5rem;
+font-size: 1.2rem;
+}
+
+.home-btn {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.info-background {
+    background: url(/static/images/3F35A60A-CF25-C56F-8A763640188964C2.jpg);    
+    background-blend-mode: multiply;
+    background-position: top;
     background-repeat: no-repeat;
-} */
+    background-size: cover;
+    height: 100vh;
+    z-index: -1;
+}
 
 .picturefill-background img {
     object-fit: cover;
-    height: 60vh;
+    height: auto;
     width: 100%;
-}
-.homepage-header {
-    width: 100%;
-    height: 56px;
-    background-color: #000;
-    position: relative;
 }
 
+.info-data{
+    padding-bottom: 5rem;
+}
+
+
+/* PROFILE VIEWS */
 .profile-image {
     width: 100%;
     border-radius: 50%;
@@ -227,10 +282,6 @@ to {
 .bookmark {
     color: gold;
 }
-
-
-
-/* PROFIL */
 
 .profile-tab {
     box-sizing: border-box;
