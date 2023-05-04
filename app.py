@@ -517,7 +517,7 @@ def show_activities():
     pagination = Pagination(page=page, per_page=per_page, offset=offset, total=total) 
     
     if not g.user:
-        return render_template('activities/list.html', activities=activities_data, pagination = pagination)
+        return render_template('activities/list.html', activities=paginated_activities, pagination = pagination)
     
     activity_ids_fav = [activity.id for activity in g.user.fav_activities]
     activity_ids_mark = [activity.id for activity in g.user.marked_activities]
@@ -898,15 +898,3 @@ def remove_mark_place(place_id):
     db.session.commit()
     
     return jsonify(message="Deleted")
-
-
-# from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-
-# Setup Flask-Login
-# login_manager = LoginManager()
-# login_manager.init_app(app)
-
-# # working below
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.query.get(user_id)

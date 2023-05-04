@@ -14,10 +14,39 @@
     </div>
 </div>
 
-<div class="container" id="info-data" class="info-data">
-    <h1  class="display-1">Acadia National Park</h1>
-    <h3>{{ info["description"] | safe }}</h3>
-    <p>{{ info["weatherInfo"] | safe }}</p>
+<div class="container-fluid">
+    <div class="info-data flex" id="info-data">
+        <div class="left"></div>
+        <div class="right flex">
+            <div class="content flex">
+                <h1 class="display-3">Acadia National Park</h1>
+                <p class="h5">{{ info["description"] | safe }}</p> 
+                <p>{{ info["weatherInfo"] | safe }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="center-data flex">
+        <div class="left flex">
+            <div class="content flex">
+                <h1 class="display-3">Visitor Centers</h1>
+                <p class="h5">Are you searching for a visitor center? The visitor centers at Acadia National Park are located in the most popular areas of the park. </p> 
+                <a href="/centers">View Visitor Centers</a>
+            </div>        
+        </div>
+        <div class="right"></div>
+    </div>
+    <div class="alert-data flex">
+        <div class="left"></div>
+        <div class="right flex">
+            <div class="content flex">
+                <h1 class="display-3">Alerts</h1>
+                <p class="h5">
+                    Stay informed about what's happening so you can have the best experience by avoiding any unexpected.</p> 
+                <a href="/alerts">View Alerts</a>
+            </div>
+        </div>
+    </div>
+    
 </div>
                     
 {% endblock %}

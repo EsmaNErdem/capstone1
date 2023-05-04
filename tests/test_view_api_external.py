@@ -1,6 +1,6 @@
 """Restful API tests"""
 
-#    FLASK_ENV=production python -m unittest tests/test_view_api_calls.py
+#    FLASK_ENV=production python -m unittest tests/test_view_api_external.py
 
 import os
 from unittest import TestCase
@@ -8,7 +8,7 @@ from models import db, User
 from api import Alerts, Centers, Info, Activities, Events, Places
 
 os.environ['DATABASE_URL'] = "postgresql:///wicked_test"
-
+os.environ['DATABASE_URL']
 from app import app, CURR_USER_KEY
 
 db.create_all()
@@ -56,7 +56,6 @@ class ApiCallTestCase(TestCase):
         with self.client as c:
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.user.id
-                os.getenv('API_KEY')
 
             # resp = c.get("/activities")
             activities = Activities()

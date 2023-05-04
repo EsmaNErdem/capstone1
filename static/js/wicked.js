@@ -235,3 +235,15 @@ async function togglePlaceMark(place) {
 placeMark.forEach((element) => {
     element.addEventListener("click", togglePlaceMark);
 });
+
+
+const image =document.querySelector(".logo")
+image.addEventListener('mouseover', () => {
+    image.style.transition = 'transform 1s linear';
+    image.style.transform = 'rotateY(360deg)';
+  });
+  
+  image.addEventListener('mouseout', () => {
+    image.style.transition = 'transform 0.5s linear';
+    image.style.transform = 'rotateY(0deg)';
+  });

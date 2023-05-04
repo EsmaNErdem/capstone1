@@ -1,8 +1,7 @@
-
-{% extends 'users/detail.html' %}
-{% block user_details %}
+{% extends 'users/profile.html' %}
+{% block profile_content%}
 <div class="container">
-    <h1 class="display-1">Favorites</h1>
+    <h1 class="display-3 text-danger">Favorites</h1>
     {% if g.user.id == user.id %}
      <div class="row">
         <a href="/users/{{ user.id }}/favorites/activities" class="btn col-sm-4">{{ activities | length }} - Activities</a>
@@ -19,6 +18,8 @@
     {% endif %}
     
     {% block fav_content %}
+
+    {% if g.user.id != user.id %}
     <h2>Activities:</h2>
     <ul class="list-group list-group-flush m-2" id="activity-list">
         {% for activity in activities %}
@@ -84,6 +85,7 @@
         </li>
         {% endfor %}
     </ul>
+    {% endif %}
     {% endblock %}    
 </div>
 

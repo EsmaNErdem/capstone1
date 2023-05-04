@@ -1,5 +1,6 @@
 :root {
-    --primary-color:#09155f
+    --primary-color: #000;
+    --gap: 1.5rem;
 }
 
 * {
@@ -68,7 +69,7 @@ a {
     text-decoration: none;    
     font-size: 20px;
     letter-spacing: 2px;
-    color: white;
+    color: #fff;
 }
 
 .primary-navigation a:hover {
@@ -97,7 +98,7 @@ a {
         inset: 0 0 0 30%;
         flex-direction: column;
         padding: min(30vh, 10rem) 2rem;
-        background: hsla(0, 0%, 0%, 0.45);
+        background: hsla(0, 0%, 0%, 0.65);
         transform: translateX(100%);
         transition: transform 450ms ease-in-out;
         z-index: 9998;
@@ -159,22 +160,23 @@ a {
 }
 
 .tree-line {
-position: absolute;
-height: 350px;
-width: 100%;
-bottom: 0;
-left: 0;
-right: 0;
-background-image: url('/static/images/tree-line.jpg');
+    position: absolute;
+    height: 350px;
+    width: 100%;
+    top: 100px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: url('/static/images/tree-line.jpg');
 }
 
 .cloud1,
 .cloud2,
 .cloud3, 
 .cloud4 {
- height: 40%;
- position: absolute;
- right: 0%;
+    height: 40%;
+    position: absolute;
+    right: 0%;
 }
 
 .cloud1{
@@ -214,11 +216,27 @@ to {
 .homepage-links {
     padding: 1rem;
     position: absolute;
-    top: 40%;
+    bottom: 5%;
     flex-direction: column;
     left: 0;
-    color:#fff;
     z-index: 2;
+}
+
+.homepage-links ul li {
+    padding-top: 2rem;
+}
+
+.homepage-links ul li a{
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.3rem;
+}
+
+.homepage-links ul li a:hover {
+    border-bottom: 2px #fff solid;
+    letter-spacing: 0.15rem;
+    transition: padding-bottom 0.2s ease-in-out;
 }
 
 .home {
@@ -228,11 +246,11 @@ to {
     height: 100vh;
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    padding: 13rem 5%;
+    padding: 13rem 5% 0;
 }
 
 .home-text{
-    line-height: 1.2;
+    line-height: 1.2rem;
     text-align: right
 }
 
@@ -244,7 +262,7 @@ font-size: 1.2rem;
 .home-btn {
     color: #fff;
     text-decoration: none;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
 }
 
 .info-background {
@@ -255,20 +273,272 @@ font-size: 1.2rem;
     background-size: cover;
     height: 100vh;
     z-index: -1;
+    box-shadow: 0px 0px 25px 5px #000;
 }
-
+/* ****************************************** */
 .picturefill-background img {
     object-fit: cover;
     height: auto;
     width: 100%;
 }
 
-.info-data{
-    padding-bottom: 5rem;
+/* homepage-info cards */
+
+.info-data {
+    position: relative;
+    height: 100vh;
+    padding: 5%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
 }
 
+/*  img url: https://www.tripsavvy.com/thmb/ElEujg8Cy47sEFdMo3L4g6UtvIU=/2119x1414/filters:fill(auto,1)/GettyImages-1028306644-a9247492b0184063a9b50125a4213727.jpg  */
+
+.info-data .left {
+    width: 50%;
+    height: 750px;
+    background-image: url(/static/images/info-card.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15%;
+    box-shadow: 0px 0px 25px 5px #000;
+}
+
+.info-data .right {
+    width: 50%;
+    min-height: 500px;
+    max-width: 1000px;
+    background: hsla(0, 0%, 0%, 0.7);
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    border-radius: 15%;
+    margin-left: -150px;
+}
+
+.info-data .right .content {
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info-data .right p{
+    line-height: 1.5rem;
+}
+
+@media (max-width: 900px) {
+    .info-data {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .info-data .left{
+        margin: 0;
+        height: 25rem;
+        width: 100%;
+    }
+
+    .info-data .right {
+        margin: 0;
+        width: 100%;
+        margin-top: -100px;
+        display: block;
+    }
+    
+    .info-data .right h1 {
+        font-size: 25px;
+    }
+
+    .info-data .right p {
+        font-size: 15px;
+    }
+
+}
+
+/* homepage-center card */
+
+.center-data {
+    position: relative;
+    height: 100vh;
+    padding: 5%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.center-data .left {
+    width: 50%;
+    min-height: 450px;
+    background: hsla(0, 0%, 0%, 0.7);
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    border-radius: 15%;
+    margin-right: -150px;
+    z-index: 2;
+}
+
+.center-data .left .content {
+    flex-direction: column;
+    justify-content: center;
+}
+
+.center-data .left p {
+    line-height: 1.5rem;
+
+}
+
+.center-data .left a{
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.3rem;
+}
+.center-data .left a:hover {
+    border-bottom: 2px #fff solid;
+    letter-spacing: 0.15rem;
+    transition: padding-bottom 0.2s ease-in-out;
+}
+.center-data .right {
+    width: 50%;
+    height: 750px;
+    background-image: url(/static/images/20221027_151412.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15%;
+    box-shadow: 0px 0px 25px 5px #000;
+    z-index: 1;
+}
+
+@media (max-width: 900px) {
+    .center-data {
+        flex-direction: column-reverse;
+        height: auto;
+    }
+    
+    .center-data .left {
+        padding: 10px;
+        margin: 0;
+        width: 100%;
+        margin-top: -100px;
+    }
+
+    .center-data .left h1 {
+        font-size: 25px;
+    }
+    
+    .center-data .left p {
+        font-size: 15px;
+    }
+    .center-data .right {
+        margin: 0;
+        height: 25rem;
+        width: 100%;
+    }
+}
+
+/* homepage-alert cards */
+
+.alert-data {
+    position: relative;
+    height: 100vh;
+    padding: 5%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+/* img url:https://www.tripsavvy.com/acadia-national-park-top-attractions-3361609 */
+.alert-data .left {
+    width: 50%;
+    height: 750px;
+    background-image: url(/static/images/AcadiaNationalParkMaine-0d82794c812449c1ba514f4642f8aea2.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15%;
+    box-shadow: 0px 0px 25px 5px #000;
+}
+
+.alert-data .right {
+    width: 50%;
+    min-height: 500px;
+    max-width: 1000px;
+    background: hsla(0, 0%, 0%, 0.7);
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    border-radius: 15%;
+    margin-left: -150px;
+}
+
+.alert-data .right .content {
+    flex-direction: column;
+    justify-content: center;
+}
+
+.alert-data .right p{
+    line-height: 1.5rem;
+}
+
+.alert-data .right a{
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.3rem;
+}
+
+.alert-data .right a:hover {
+    display: inline;
+    border-bottom: 2px #fff solid;
+    letter-spacing: 0.15rem;
+    transition: padding-bottom 0.2s ease-in-out;
+}
+
+@media (max-width: 900px) {
+    .alert-data {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .alert-data .left{
+        margin: 0;
+        height: 25rem;
+        width: 100%;
+    }
+
+    .alert-data .right {
+        padding: 10px;
+        margin: 0;
+        width: 100%;
+        margin-top: -100px;
+    }
+    
+    .alert-data .right h1 {
+        font-size: 25px;
+    }
+
+    .alert-data .right p {
+        font-size: 15px;
+    }
+}
 
 /* PROFILE VIEWS */
+.user-profile {
+    margin-top: 5%;
+}
+
+.user-profile a {
+    text-decoration: none;
+    color: #000;
+}
+
 .profile-image {
     width: 100%;
     border-radius: 50%;

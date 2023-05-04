@@ -1,16 +1,11 @@
-{% extends 'homepage/homepage.html'  %}
+{% extends 'base.html'  %}
 
-{% block background_img %}
-<div class="picturefill-background">
-    <img src="{{ info['images'][0]['url'] }}" >
-</div>
-{% endblock %}
 
-{% block homepage_content %}
+{% block content %}
 
-<div class="container">
+<div class="container visitor-center">
     <h1  class="display-1">Visitor Centers</h1>
-    <ul class="list-group list-group-flush">
+    <ul class="list-group list-group-flush centers-list">
         {% for center in centers %}
         <li class="list-group-item">
             <h2 class="text-info">{{ center["name"] }}</h2>
