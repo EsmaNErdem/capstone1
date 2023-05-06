@@ -13,9 +13,9 @@
                 </a>
             </div>
             <div class="col-xs-12 col-md-7">
-                <h2  class="text-info"><a href="/activities/{{ activity['id']}}" id="activity-link">{{ activity["title"] }}</a></h2>
+                <h2  class="text-info list-title"><a href="/activities/{{ activity['id']}}" id="activity-link">{{ activity["title"] }}</a></h2>
                 <p>{{ activity["description"] }}</p>
-                <div class="row justify-content-start"> 
+                <div class="row justify-content-start user-icons"> 
                     <i class="fa-solid fa-heart {% if activity['id'] in activity_ids_fav %} favorite {% endif %}" id="activity-fav" data-id="{{ activity['id'] }}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['image_url'] }}" data-description='{{ activity["description"] }}'></i>
                     <i class="fa-solid fa-bookmark {% if activity['id'] in activity_ids_mark %} bookmark {% endif %}" id="activity-mark" data-id="{{ activity['id']}}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['image_url']}}" data-description='{{ activity["description"] }}'></i>                      
                 </div>

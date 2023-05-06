@@ -3,12 +3,12 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="display-1">Events</h1>
+    <h1 class="display-1 events-list">Events</h1>
     {{ pagination.info }}
     <ul class="list-group list-group-flush m-2">
         {% for event in events %}
         <li class="list-group-item">
-            <h2>{{ event["title"] }}</h2>        
+            <h2 class="event-list">{{ event["title"] }}</h2>        
             <h3>By {{ event["contactname"] }}</h3>
             <p>{{ event["description"] | safe }}</p>
             <p>{{ event["regresinfo"] }}</p>  
@@ -18,7 +18,7 @@
                 {% endfor %}
             </p>  
             {% if g.user %}
-            <div class="row justify-content-start">
+            <div class="row justify-content-start user-icons">
                 <i class="fa-solid fa-heart {% if event['id'] in event_ids_fav %} favorite {% endif %}" id="event-fav" data-id="{{ event['id']}}" data-title='{{ event["title"] }}' data-description='{{ event["description"] }}'></i>
                 <i class="fa-solid fa-bookmark {% if event['id'] in event_ids_mark %} bookmark {% endif %}" id="event-mark" data-id="{{ event['id']}}" data-title='{{ event["title"] }}'  data-description='{{ event["description"] }}'></i>                  
             </div>
