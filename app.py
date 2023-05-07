@@ -252,7 +252,7 @@ def edit_profile(user_id):
             return redirect(url_for('profile', user_id=user.id))
         else: 
             flash("Please enter correct password to confirm.", "danger")
-    return render_template('users/edit.html', form=form)
+    return render_template('users/edit.html', user=user, form=form)
 
 @app.route('/users/delete', methods=["POST"])
 def delete_user():
@@ -480,23 +480,26 @@ def list_search_results():
 
     search = request.args.get('q')
     user = g.user 
-    activities = Activity.query.filter(db.or_(Activity.title.ilike(f"%{search}%"), Activity.description.ilike(f"%{search}%"))).all()    
-    events = Event.query.filter(db.or_(Event.title.ilike(f"%{search}%"), Event.description.ilike(f"%{search}%"))).all()    
-    places = Place.query.filter(db.or_(Place.title.ilike(f"%{search}%"), Place.description.ilike(f"%{search}%"))).all() 
-
     activity_ids_mark = [activity.id for activity in g.user.marked_activities]
     activity_ids_fav = [activity.id for activity in g.user.fav_activities]
     event_ids_fav = [event.id for event in g.user.fav_events]
     event_ids_mark = [event.id for event in g.user.marked_events] 
     place_ids_mark = [place.id for place in g.user.marked_places]
     place_ids_fav = [place.id for place in g.user.fav_places]
+
+    activities = Activity.query.filter(db.or_(Activity.title.ilike(f"%{search}%"), Activity.description.ilike(f"%{search}%")),
+        Activity.id.in_(activity_ids_mark + activity_ids_fav)).all()    
+    events = Event.query.filter(db.or_(Event.title.ilike(f"%{search}%"), Event.description.ilike(f"%{search}%")),
+        Event.id.in_(event_ids_fav + event_ids_mark)).all()    
+    places = Place.query.filter(db.or_(Place.title.ilike(f"%{search}%"), Place.description.ilike(f"%{search}%")),
+                                Place.id.in_(place_ids_fav + place_ids_mark)).all() 
+
     
     return render_template("users/search.html", user=user, activities=activities, events=events, places=places, activity_ids_mark=activity_ids_mark, activity_ids_fav=activity_ids_fav, place_ids_mark=place_ids_mark, place_ids_fav=place_ids_fav, event_ids_fav=event_ids_fav, event_ids_mark=event_ids_mark)
 
 
 # ----------------ACTIVITIES---------------
-    # import pdb
-    # pdb.set_trace()
+
 
 @app.route('/activities')
 def show_activities():
@@ -604,7 +607,7 @@ def show_place(place_id):
     """Shows selected place with detailed info"""
     
     try: 
-        place_data = places.get_places(place_id)
+        place_data = places.get_place(place_id)
     except: 
         flash("There was an API error. Pleace try again later", 'danger')
         return render_template('api-error.html')
@@ -673,7 +676,8 @@ def page_not_authorized(e):
 
 
 # -----------------Restful API Routes-------------------
-
+ # import pdb
+ # pdb.set_trace()
 # Activity
 @app.route("/api/activity/favorite", methods=["POST"])
 def add_fav_act():
@@ -706,8 +710,8 @@ def add_fav_act():
 def remove_fav_act(activity_id):
     """Removes from activity from user favorite and from database"""
 
-    activity = Activity.query.filter_by(id=activity_id).first_or_404()
-    g.user.fav_activities.remove(activity)
+    activity = Favorite.query.filter_by(activity_id=activity_id).first_or_404()
+    db.session.delete(activity)
     db.session.commit()
 
     return jsonify(message="Deleted")
@@ -743,8 +747,8 @@ def add_mark_act():
 def remove_mark_act(activity_id):
     """Removes from activity from user bookmark and from database"""
 
-    activity = Activity.query.filter_by(id=activity_id).first_or_404()
-    g.user.marked_activities.remove(activity)
+    activity = Bookmark.query.filter_by(activity_id=activity_id).first_or_404()
+    db.session.delete(activity)
     db.session.commit()
     
     return jsonify(message="Deleted")
@@ -780,8 +784,8 @@ def add_fav_event():
 def remove_fav_event(event_id):
     """Removes from event from user favorite and from database"""
 
-    event = Event.query.filter_by(id=event_id).first_or_404()
-    g.user.fav_events.remove(event)
+    event = Favorite.query.filter_by(event_id=event_id).first_or_404()
+    db.session.delete(event)
     db.session.commit()
 
     return jsonify(message="Deleted")
@@ -817,8 +821,8 @@ def add_mark_event():
 def remove_mark_event(event_id):
     """Removes from event from user bookmark and from database"""
 
-    event = Event.query.filter_by(id=event_id).first_or_404()
-    g.user.marked_events.remove(event)
+    event = Bookmark.query.filter_by(event_id=event_id).first_or_404()
+    db.session.delete(event)
     db.session.commit()
     
     return jsonify(message="Deleted")
@@ -856,8 +860,8 @@ def add_fav_place():
 def remove_fav_place(place_id):
     """Removes from place from user favorite and from database"""
 
-    place = Place.query.filter_by(id=place_id).first_or_404()
-    g.user.fav_places.remove(place)
+    place = Favorite.query.filter_by(place_id=place_id).first_or_404()
+    db.session.delete(place)
     db.session.commit()
 
     return jsonify(message="Deleted")
@@ -893,8 +897,8 @@ def add_mark_place():
 def remove_mark_place(place_id):
     """Removes from place from user bookmark and from bookmark-database"""
 
-    place = Place.query.filter_by(id=place_id).first_or_404()
-    g.user.marked_places.remove(place)
+    place = Bookmark.query.filter_by(place_id=place_id).first_or_404()
+    db.session.delete(place)
     db.session.commit()
     
     return jsonify(message="Deleted")

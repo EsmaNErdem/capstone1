@@ -11,8 +11,7 @@
         </div>
         <div class="col-md-3">
             {% if g.user %}                    
-            <div class="row justify-content-start">
-                
+            <div class="row justify-content-start user-icons">                
                 <i class="fa-solid fa-heart {% if favored %} favorite {% endif %}" id="place-fav" data-id="{{ place['id'] }}" data-title='{{ place["title"] }}' data-image-url="{% if place['images'][0]['crops'] %} {{  place['images'][0]['crops'][0]['url'] }} {% else %} {{ place['images'][0]['url'] }} {% endif %}" data-description='{{ place["audioDescription"] }}'></i>
                 <i class="fa-solid fa-bookmark {% if marked %} bookmark {% endif %}" id="place-mark" data-id="{{ place['id']}}" data-title='{{ place["title"] }}' data-image-url="{% if place['images'][0]['crops'] %} {{  place['images'][0]['crops'][0]['url'] }} {% else %} {{ place['images'][0]['url'] }} {% endif %}" data-description='{{ place["audioDescription"] }}'></i>                      
             </div>

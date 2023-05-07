@@ -104,7 +104,7 @@ class Places():
         data = response.json()
         return data['data']
     
-    def get_places(self, id):
+    def get_place(self, id):
         """Makes API request to get selected place data."""
 
         response = requests.get(f'{BASE_URL}/places',

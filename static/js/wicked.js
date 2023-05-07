@@ -32,11 +32,15 @@ async function toggleActivityFav(event) {
                 console.error(err);
             }
     } else {
-        let id = heart.getAttribute("data-id");
-        const resp = await axios.delete(
-            `/api/activity/${id}/favorite`
-        );
-        heart.classList.remove("favorite");
+        try {            
+            let id = heart.getAttribute("data-id");
+            const resp = await axios.delete(
+                `/api/activity/${id}/favorite`
+            );
+            heart.classList.remove("favorite");
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
 
@@ -70,11 +74,15 @@ async function toggleActivityMark(event) {
                 console.error(err);
             }
     } else {
-        let id = bookmark.getAttribute("data-id");
-        const resp = await axios.delete(
-            `/api/activity/${id}/bookmark`
-        );
-        bookmark.classList.remove("bookmark");
+        try {
+            let id = bookmark.getAttribute("data-id");
+            const resp = await axios.delete(
+                `/api/activity/${id}/bookmark`
+            );
+            bookmark.classList.remove("bookmark");
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
 
@@ -109,11 +117,15 @@ async function toggleEventFav(event) {
                 console.error(err);
             }
     } else {
-        let id = heart.getAttribute("data-id");
-        const resp = await axios.delete(
-            `/api/event/${id}/favorite`
-        );
-        heart.classList.remove("favorite");
+        try {
+            let id = heart.getAttribute("data-id");
+            const resp = await axios.delete(
+                `/api/event/${id}/favorite`
+            );
+            heart.classList.remove("favorite");           
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
 
@@ -145,11 +157,15 @@ async function toggleEventMark(event) {
                 console.error(err);
             }
     } else {
-        let id = bookmark.getAttribute("data-id");
-        const resp = await axios.delete(
-            `/api/event/${id}/bookmark`
-        );
-        bookmark.classList.remove("bookmark");
+        try {
+            let id = bookmark.getAttribute("data-id");
+            const resp = await axios.delete(
+                `/api/event/${id}/bookmark`
+            );
+            bookmark.classList.remove("bookmark");
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
 
@@ -186,11 +202,15 @@ async function togglePlaceFav(place) {
                 console.error(err);
             }
     } else {
-        let id = heart.getAttribute("data-id");
-        const resp = await axios.delete(
-            `/api/place/${id}/favorite`
-        );
-        heart.classList.remove("favorite");
+        try {
+            heart.classList.remove("favorite");
+            let id = heart.getAttribute("data-id");
+            const resp = await axios.delete(
+                `/api/place/${id}/favorite`
+            );
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
 
@@ -224,11 +244,15 @@ async function togglePlaceMark(place) {
                 console.error(err);
             }
     } else {
-        let id = bookmark.getAttribute("data-id");
-        const resp = await axios.delete(
-            `/api/place/${id}/bookmark`
-        );
-        bookmark.classList.remove("bookmark");
+        try {
+            let id = bookmark.getAttribute("data-id");
+            const resp = await axios.delete(
+                `/api/place/${id}/bookmark`
+            );
+            bookmark.classList.remove("bookmark");
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
 
