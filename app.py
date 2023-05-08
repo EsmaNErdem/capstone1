@@ -710,7 +710,7 @@ def add_fav_act():
 def remove_fav_act(activity_id):
     """Removes from activity from user favorite and from database"""
 
-    activity = Favorite.query.filter_by(activity_id=activity_id).first_or_404()
+    activity = Favorite.query.filter_by(activity_id=activity_id, user_id=g.user.id).first_or_404()
     db.session.delete(activity)
     db.session.commit()
 
@@ -747,7 +747,7 @@ def add_mark_act():
 def remove_mark_act(activity_id):
     """Removes from activity from user bookmark and from database"""
 
-    activity = Bookmark.query.filter_by(activity_id=activity_id).first_or_404()
+    activity = Bookmark.query.filter_by(activity_id=activity_id, user_id=g.user.id).first_or_404()
     db.session.delete(activity)
     db.session.commit()
     
@@ -784,7 +784,7 @@ def add_fav_event():
 def remove_fav_event(event_id):
     """Removes from event from user favorite and from database"""
 
-    event = Favorite.query.filter_by(event_id=event_id).first_or_404()
+    event = Favorite.query.filter_by(event_id=event_id, user_id=g.user.id).first_or_404()
     db.session.delete(event)
     db.session.commit()
 
@@ -821,7 +821,7 @@ def add_mark_event():
 def remove_mark_event(event_id):
     """Removes from event from user bookmark and from database"""
 
-    event = Bookmark.query.filter_by(event_id=event_id).first_or_404()
+    event = Bookmark.query.filter_by(event_id=event_id, user_id=g.user.id).first_or_404()
     db.session.delete(event)
     db.session.commit()
     
@@ -860,7 +860,7 @@ def add_fav_place():
 def remove_fav_place(place_id):
     """Removes from place from user favorite and from database"""
 
-    place = Favorite.query.filter_by(place_id=place_id).first_or_404()
+    place = Favorite.query.filter_by(place_id=place_id, user_id=g.user.id).first_or_404()
     db.session.delete(place)
     db.session.commit()
 
@@ -897,7 +897,7 @@ def add_mark_place():
 def remove_mark_place(place_id):
     """Removes from place from user bookmark and from bookmark-database"""
 
-    place = Bookmark.query.filter_by(place_id=place_id).first_or_404()
+    place = Bookmark.query.filter_by(place_id=place_id, user_id=g.user.id).first_or_404()
     db.session.delete(place)
     db.session.commit()
     
