@@ -38,16 +38,13 @@ function showLoader() {
     loader.classList.remove("hidden")
 }
 
-const timeout = setTimeout(showLoader, 750);
-
 window.addEventListener("load", function () {
-    clearTimeout(timeout);
     page.classList.remove("hidden");
     loader.classList.add("hidden");
 });
 
 window.onbeforeunload = function() {
-    const timeout = setTimeout(showLoader, 750);
+    showLoader()
 };
 
 // navHomepage.addEventListener("click", showLoader)
