@@ -1,3 +1,23 @@
+//profile image toggle
+const profileToggle = document.querySelector("#profile-toggle");
+const profileNav = document.querySelector("#profile-navigation")
+
+profileToggle.addEventListener("mouseover", function(evt){
+    const showProfileNav = profileNav.getAttribute("data-visible"); 
+
+    if (showProfileNav === "false"){
+        profileNav.setAttribute("data-visible", true);
+        
+    } else {
+        profileNav.setAttribute("data-visible", false);
+    }
+});
+
+window.addEventListener("click", function(evt) {
+    profileNav.setAttribute("data-visible", false);
+});
+
+// navbar responsive toggle
 const primaryNav = document.querySelector("#primary-navigation");
 const navToggle = document.querySelector("#nav-toggle");
 

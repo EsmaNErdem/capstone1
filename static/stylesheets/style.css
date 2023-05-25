@@ -79,8 +79,29 @@ a {
 }
 
 .nav-profile-img {
-    width: 30px;
+    width: 50px;
     border-radius: 50%;
+}
+
+.sub-profile-wrap {
+    display: none;
+    position: absolute;
+    top: 80%;
+    right: 10%;
+    width: 250px;
+    background-color: #000000ba; 
+    z-index: 999999;
+    transition: display 0.5s;
+}
+
+.sub-profile {
+    flex-direction: column;
+    gap: 0;
+    padding: 1rem;
+}
+
+.sub-profile-wrap[data-visible="true"] {
+    display: block;
 }
 
 .search-box {
@@ -127,6 +148,11 @@ a {
         background-size: cover;
         border-radius: 50%;
         z-index: 9999;
+    }
+
+    .sub-profile-wrap {
+        top: 48%;
+        background-color: #000;
     }
 }
 
@@ -245,19 +271,20 @@ to {
     letter-spacing: 0.15rem;
 }
 
-.home {
+.home {  
     position: relative;
     color:#fff;
     width: 100%;
     height: 100vh;
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    padding: 13rem 5% 0;
+    margin-top: 5rem;
+    padding: 8rem 5% 0;
 }
 
 .home-text{
     line-height: 1.2rem;
-    text-align: right
+    text-align: right;
 }
 
 .home-text p{
@@ -644,7 +671,7 @@ to {
 }
 
 .profile:hover{
-    color: darkgreen;
+    color: yellowgreen;
 }
 
 .profile-fav:hover{

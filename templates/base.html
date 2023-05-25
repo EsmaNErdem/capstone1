@@ -51,11 +51,18 @@
                     <a href="/login">Log in</a>
                 </li>
                 {% else %}
-                <li>
+                <li area-controls="profile-navigation" id="profile-toggle">
                     <a href="/users/{{ g.user.id }}">
                         <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}" class="nav-profile-img">
                     </a>
                 </li>
+                <div class="sub-profile-wrap" id="profile-navigation" data-visible ="false">
+                    <div class="sub-profile flex">
+                        <a href="/users/{{ g.user.id }}" class="profile"><i class="fa-solid fa-user"></i> Profile</a>
+                        <a href="/users/{{ g.user.id }}/favorites" class="profile-fav"><i class="fa-solid fa-heart favorite"></i> Favorites</a>
+                        <a href="/users/{{ g.user.id }}/bookmarks" class="profile-book"><i class="fa-solid fa-bookmark bookmark"></i> Bookmarks</a>
+                    </div>
+                </div>
                 <li>
                     <a href="/logout">Log out</a>
                 </li>
@@ -76,7 +83,7 @@
             <img src="/static/images/cloud.webp" alt="" class="cloud2">
             <img src="/static/images/cloud.webp" alt="" class="cloud3">
             <img src="/static/images/cloud.webp" alt="" class="cloud4">
-            <h1> PAGE LOADING...</h1>
+            <h1 class="text-center"> PAGE LOADING...</h1>
         </div>
         <div class="content" id="main-content">
             {% block content %}
