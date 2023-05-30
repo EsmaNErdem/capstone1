@@ -62,7 +62,7 @@ def add_user_to_g():
         g.user = None
 
 
-def do_login(user, remember ):
+def do_login(user, remember):
     """Log in user by saving user_id in session"""
 
     session[CURR_USER_KEY] = user.id

@@ -18,6 +18,7 @@ async function toggleActivityFav(event) {
         let imageUrl = heart.getAttribute('data-image-url');
         let description = heart.getAttribute('data-description');
         heart.classList.add("favorite");
+        heart.setAttribute("title", "Remove from Favorites");
         try {
                 const resp = await axios.post(
                     "/api/activity/favorite",
@@ -38,6 +39,7 @@ async function toggleActivityFav(event) {
                 `/api/activity/${id}/favorite`
             );
             heart.classList.remove("favorite");
+            heart.setAttribute("title", "Add to Favorites");
         } catch (err) {
             console.error(err);
         }
@@ -60,6 +62,7 @@ async function toggleActivityMark(event) {
         let imageUrl = bookmark.getAttribute('data-image-url');
         let description = bookmark.getAttribute('data-description');
         bookmark.classList.add("bookmark");
+        bookmark.setAttribute("title", "Remove from Bookmarks");
         try {
                 const resp = await axios.post(
                     "/api/activity/bookmark",
@@ -80,6 +83,7 @@ async function toggleActivityMark(event) {
                 `/api/activity/${id}/bookmark`
             );
             bookmark.classList.remove("bookmark");
+            bookmark.setAttribute("title", "Add to Bookmarks");
         } catch (err) {
             console.error(err);
         }
@@ -104,6 +108,7 @@ async function toggleEventFav(event) {
         let title = heart.getAttribute('data-title');
         let description = heart.getAttribute('data-description');
         heart.classList.add("favorite");
+        heart.setAttribute("title", "Remove from Favorites");
         try {
                 const resp = await axios.post(
                     "/api/event/favorite",
@@ -123,7 +128,8 @@ async function toggleEventFav(event) {
                 `/api/event/${id}/favorite`
             );
             heart.classList.remove("favorite");           
-        } catch (err) {
+            heart.setAttribute("title", "Add to Favorites");
+    } catch (err) {
             console.error(err);
         }
     }
@@ -144,6 +150,7 @@ async function toggleEventMark(event) {
         let title = bookmark.getAttribute('data-title');
         let description = bookmark.getAttribute('data-description');
         bookmark.classList.add("bookmark");
+        bookmark.setAttribute("title", "Remove from Bookmarks");
         try {
                 const resp = await axios.post(
                     "/api/event/bookmark",
@@ -163,6 +170,7 @@ async function toggleEventMark(event) {
                 `/api/event/${id}/bookmark`
             );
             bookmark.classList.remove("bookmark");
+            bookmark.setAttribute("title", "Add to Bookmarks");
         } catch (err) {
             console.error(err);
         }
@@ -188,6 +196,7 @@ async function togglePlaceFav(place) {
         let title = heart.getAttribute('data-title');
         let description = heart.getAttribute('data-description');
         heart.classList.add("favorite");
+        heart.setAttribute("title", "Remove from Favorites");
         try {
                 const resp = await axios.post(
                     "/api/place/favorite",
@@ -204,6 +213,7 @@ async function togglePlaceFav(place) {
     } else {
         try {
             heart.classList.remove("favorite");
+            heart.setAttribute("title", "Add to Favorites");
             let id = heart.getAttribute("data-id");
             const resp = await axios.delete(
                 `/api/place/${id}/favorite`
@@ -230,6 +240,7 @@ async function togglePlaceMark(place) {
         let title = bookmark.getAttribute('data-title');
         let description = bookmark.getAttribute('data-description');
         bookmark.classList.add("bookmark");
+        bookmark.setAttribute("title", "Remove from Bookmarks");
         try {
                 const resp = await axios.post(
                     "/api/place/bookmark",
@@ -250,6 +261,7 @@ async function togglePlaceMark(place) {
                 `/api/place/${id}/bookmark`
             );
             bookmark.classList.remove("bookmark");
+            bookmark.setAttribute("title", "Add to Bookmarks");
         } catch (err) {
             console.error(err);
         }

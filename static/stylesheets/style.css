@@ -670,7 +670,11 @@ to {
     color: gold;
 }
 
-.profile:hover{
+.profile-icon {
+    color: yellowgreen;
+}
+
+.profile:hover {
     color: yellowgreen;
 }
 

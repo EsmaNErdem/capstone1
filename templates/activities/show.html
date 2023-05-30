@@ -11,9 +11,9 @@
         </div>
         <div class="col-md-3">
             {% if g.user %}                    
-            <div class="row justify-content-start user-icons">
-                <i class="fa-solid fa-heart {% if favored %} favorite {% endif %}" id="activity-fav" data-id="{{ activity['id']}}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['images'][0]['crops'][0]['url'] }}" data-description='{{ activity["shortDescription"] }}'></i>
-                <i class="fa-solid fa-bookmark {% if marked %} bookmark {% endif %}" id="activity-mark" data-id="{{ activity['id']}}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['images'][0]['crops'][0]['url'] }}" data-description='{{ activity["shortDescription"] }}'></i>                   
+            <div class="row justify-content-start user-icons m-3">
+                <i class="fa-solid fa-heart {% if favored %} favorite {% endif %}" id="activity-fav" data-id="{{ activity['id']}}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['images'][0]['crops'][0]['url'] }}" data-description='{{ activity["shortDescription"] }}' title="Add to Favorites"></i>
+                <i class="fa-solid fa-bookmark {% if marked %} bookmark {% endif %}" id="activity-mark" data-id="{{ activity['id']}}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['images'][0]['crops'][0]['url'] }}" data-description='{{ activity["shortDescription"] }}' title="Add to Bookmarks"></i>                   
             </div>
             {% endif %}
         </div>

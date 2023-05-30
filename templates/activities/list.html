@@ -15,14 +15,14 @@
                     </a>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <h2  class="text-info list-title"><a href="/activities/{{ activity['id']}}" id="activity-link">{{ activity["title"] }}</a></h2>
-                    <p>{{ activity["shortDescription"] }}</p>
                     {% if g.user %}
-                    <div class="row justify-content-start user-icons"> 
-                        <i class="fa-solid fa-heart {% if activity['id'] in activity_ids_fav %} favorite {% endif %}" id="activity-fav" data-id="{{ activity['id'] }}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['images'][0]['crops'][0]['url'] }}" data-description='{{ activity["shortDescription"] }}'></i>
-                        <i class="fa-solid fa-bookmark {% if activity['id'] in activity_ids_mark %} bookmark {% endif %}" id="activity-mark" data-id="{{ activity['id']}}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['images'][0]['crops'][0]['url'] }}" data-description='{{ activity["shortDescription"] }}'></i>                      
+                    <div class="row justify-content-start user-icons m-3"> 
+                        <i class="fa-solid fa-heart {% if activity['id'] in activity_ids_fav %} favorite {% endif %}" id="activity-fav" data-id="{{ activity['id'] }}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['images'][0]['crops'][0]['url'] }}" data-description='{{ activity["shortDescription"] }}' title="Add to Favorites"></i>
+                        <i class="fa-solid fa-bookmark {% if activity['id'] in activity_ids_mark %} bookmark {% endif %}" id="activity-mark" data-id="{{ activity['id']}}" data-title='{{ activity["title"] }}' data-image-url="{{ activity['images'][0]['crops'][0]['url'] }}" data-description='{{ activity["shortDescription"] }}' title="Add to Bookmarks"></i>                      
                     </div>
                     {% endif %}
+                    <h2  class="text-info list-title"><a href="/activities/{{ activity['id']}}" id="activity-link">{{ activity["title"] }}</a></h2>
+                    <p>{{ activity["shortDescription"] }}</p>
                 </div>
             </div>
         </li>
