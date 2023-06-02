@@ -2,6 +2,7 @@
 const profileToggle = document.querySelector("#profile-toggle");
 const profileNav = document.querySelector("#profile-navigation")
 
+if (profileToggle) {
 profileToggle.addEventListener("mouseover", function(evt){
     const showProfileNav = profileNav.getAttribute("data-visible"); 
 
@@ -12,7 +13,7 @@ profileToggle.addEventListener("mouseover", function(evt){
         profileNav.setAttribute("data-visible", false);
     }
 });
-
+};
 window.addEventListener("click", function(evt) {
     profileNav.setAttribute("data-visible", false);
 });
