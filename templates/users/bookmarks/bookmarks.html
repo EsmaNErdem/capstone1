@@ -3,10 +3,10 @@
 <div class="container">
     <h1 class="display-4 text-warning">Bookmarks</h1>
     {% if g.user.id == user.id %}
-    <div class="row">
-        <a href="/users/{{ user.id }}/bookmarks/activities" class="btn col-sm-4">{{ activities | length }} - Activities</a>
-        <a href="/users/{{ user.id }}/bookmarks/events" class="btn col-sm-4">{{ events | length }} - Events</a>
-        <a href="/users/{{ user.id }}/bookmarks/places" class="btn col-sm-4">{{ places | length }} - Places</a>
+    <div class="row tabs mb-3">
+        <a href="/users/{{ user.id }}/bookmarks/activities" class="btn col-sm-4 {% if request.path == '/users/' ~ user.id ~ '/bookmarks/activities' %}active{% endif %}">{{ activities | length }} - Activities</a>
+        <a href="/users/{{ user.id }}/bookmarks/events" class="btn col-sm-4 {% if request.path == '/users/' ~ user.id ~ '/bookmarks/events' %}active{% endif %}">{{ events | length }} - Events</a>
+        <a href="/users/{{ user.id }}/bookmarks/places" class="btn col-sm-4 {% if request.path == '/users/' ~ user.id ~ '/bookmarks/places' %}active{% endif %}">{{ places | length }} - Places</a>
     </div>   
     {% endif %}
     {% if g.user.id != user.id %}

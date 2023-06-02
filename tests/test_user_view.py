@@ -83,8 +83,8 @@ class UserViewTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn(self.user.username, str(resp.data))
             html = resp.get_data(as_text=True)
-            self.assertIn('<i class="fa-solid fa-heart favorite"></i>Favorites', html)
-            self.assertIn('<i class="fa-solid fa-bookmark bookmark"></i>Bookmarks</a>', html)
+            self.assertIn('<a href="/users/1/favorites/activities" class="profile-fav"><i class="fa-solid fa-heart favorite"></i> Favorites</a>', html)
+            self.assertIn('<a href="/users/1/bookmarks/activities" class="profile-book"><i class="fa-solid fa-bookmark bookmark"></i> Bookmarks</a>', html)
 
     def test_user_profile_edit(self):
         """Test view user profile edit"""
@@ -122,7 +122,6 @@ class UserViewTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn("Access unauthorized.", str(resp.data))
 
-
     def test_user_profile_delete(self):
         """Test view user profile delete"""
 
@@ -151,7 +150,6 @@ class UserViewTestCase(TestCase):
             self.assertIn(self.user.marked_events[0].title, str(resp.data))
             self.assertIn('place1', str(resp.data))
 
-
     def test_user_favorites(self):
         """Test view user favorites"""
 
@@ -166,7 +164,7 @@ class UserViewTestCase(TestCase):
             self.assertIn('1 - Events', str(resp.data))
             self.assertIn('2 - Activities', str(resp.data))
             html = resp.get_data(as_text=True)
-            self.assertIn('<h1 class="display-1">Favorites</h1>', html)
+            self.assertIn('Favorites</h1>', html)
 
     def test_user_favorite_activities(self):
         """Test view user favorites activities"""
@@ -183,7 +181,7 @@ class UserViewTestCase(TestCase):
             self.assertIn(self.user.fav_activities[0].title, str(resp.data))
             self.assertIn(self.user.fav_activities[1].title, str(resp.data))
             html = resp.get_data(as_text=True)
-            self.assertIn('<h1 class="display-1">Favorites</h1>', html)
+            self.assertIn('Favorites</h1>', html)
 
     def test_user_favorite_events(self):
         """Test view user favorite events"""
@@ -199,7 +197,7 @@ class UserViewTestCase(TestCase):
             self.assertIn('2 - Activities', str(resp.data))
             self.assertIn(self.user.fav_events[0].title, str(resp.data))
             html = resp.get_data(as_text=True)
-            self.assertIn('<h1 class="display-1">Favorites</h1>', html)
+            self.assertIn('Favorites</h1>', html)
 
 
     def test_user_bookmarks(self):
@@ -216,7 +214,7 @@ class UserViewTestCase(TestCase):
             self.assertIn('1 - Events', str(resp.data))
             self.assertIn('2 - Places', str(resp.data))
             html = resp.get_data(as_text=True)
-            self.assertIn('<h1 class="display-1">Bookmarks</h1>', html)
+            self.assertIn('Bookmarks</h1>', html)
 
 
     def test_user_bookmark_places(self):
@@ -234,7 +232,7 @@ class UserViewTestCase(TestCase):
             self.assertIn(self.user.marked_places[0].title, str(resp.data))
             self.assertIn(self.user.marked_places[1].title, str(resp.data))
             html = resp.get_data(as_text=True)
-            self.assertIn('<h1 class="display-1">Bookmarks</h1>', html)
+            self.assertIn('Bookmarks</h1>', html)
 
 
     def test_user_bookmark_events(self):
@@ -251,7 +249,7 @@ class UserViewTestCase(TestCase):
             self.assertIn('1 - Events', str(resp.data))            
             self.assertIn(self.user.marked_events[0].title, str(resp.data))
             html = resp.get_data(as_text=True)
-            self.assertIn('<h1 class="display-1">Bookmarks</h1>', html)
+            self.assertIn('Bookmarks</h1>', html)
 
 
            
