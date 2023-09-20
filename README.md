@@ -14,10 +14,35 @@ One of the finest ways to rejuvenate and reconnect with oneself is to spend time
 
 This simple app created with Python(Python 3.10.6), Flask as Backend, Javascript as Frontend. SQLAlchhemy-Postgres was used to create databases. Users passwords will be hashed using Bcrpyt. All of the forms were created using WTForms.
 
-### Installing Dependencies 
-To install dependencies:
-```sh
- pip3 install r requirements.txt
+### Installation and Database Setup
+1. Create your directory and clone my repository:
+ ```shell
+    git clone https://github.com/EsmaNErdem/capstone1.git
+```
+
+2. Create a virtual environment using Python 3.10.6:
+```shell
+    python3 -m venv venv
+```
+
+3. Activate the virtual environment:
+```shell
+    source venv/bin/activate
+```
+
+4. Install the required packages using pip:
+```shell
+    (venv) $ pip install -r requirements.txt
+```
+
+5. Create a PostgreSQL database for the app:
+```shell
+    (venv) $ createdb wicked_acadia
+```
+
+6. Create a PostgreSQL database for the test:
+```shell
+    (venv) $ createdb wicked_test
 ```
 
 ### Testing
